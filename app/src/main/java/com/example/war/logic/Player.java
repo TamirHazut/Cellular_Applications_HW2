@@ -35,7 +35,7 @@ public class Player {
         this.score++;
     }
 
-    public void printDeck() {
-        this.getDeck().printCards();
+    public void printDeck(int i) {
+        this.getDeck().printCards(i);
     }
 }

@@ -43,9 +43,9 @@ public class Deck {
         return this.getCards().isEmpty();
     }
 
-    public void printCards() {
+    public void printCards(int i) {
         for (Card card : this.getCards()) {
-            Log.d("pttttB", card.toString());
+            Log.d("ptttt" + i, card.toString());
         }
     }
 }

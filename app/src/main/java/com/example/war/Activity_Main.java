@@ -2,10 +2,8 @@ package com.example.war;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,7 +27,6 @@ public class Activity_Main extends AppCompatActivity {
     private ImageView main_IMG_avatar_p2;
     private ImageView main_IMG_card_p2;
     private ImageView main_IMG_play;
-    private AlertDialog.Builder builder;
 
 
     @Override
@@ -41,7 +38,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     private void initProgram() {
-        this.builder = new AlertDialog.Builder(this);
         loadCards();
         createDecks();
         findViews();
@@ -71,7 +67,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     private void drawCards() {
-
         Card p1_card = players.get(0).getDeck().getCard();
         String p1_card_name = "poker_card_" + p1_card.getSuit() + "_" + p1_card.getValue();
         int p1_card_id = this.getResources().getIdentifier(p1_card_name, "drawable", this.getPackageName());
@@ -88,31 +83,32 @@ public class Activity_Main extends AppCompatActivity {
             main_LBL_score_p2.setText("" + players.get(1).getScore());
         }
         if (players.get(0).getDeck().isEmpty() || players.get(0).getDeck().isEmpty()) {
-            showResult();
+            openResult();
         }
     }
 
-    private void showResult() {
-        String result;
+    private void openResult() {
+        int result;
+        int avatar;
         if (players.get(0).getScore() > players.get(1).getScore()) {
-            result = "Player 1 Won!";
+            result = 1;
+            avatar = (players.get(0).getGender() == Player.Gender.MALE
+                    ? R.drawable.user_avatar_male
+                    : R.drawable.user_avatar_female);
         } else if (players.get(1).getScore() > players.get(0).getScore()) {
-            result = "Player 2 Won!";
+            result = 2;
+            avatar = (players.get(1).getGender() == Player.Gender.MALE
+                    ? R.drawable.user_avatar_male
+                    : R.drawable.user_avatar_female);
         } else {
-            result = "It's a Tie!";
+            result = 0;
+            avatar = R.drawable.game_end_draw_avatar;
         }
-        this.builder.setCancelable(false);
-        this.builder.setPositiveButton(
-                "Play again",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        initProgram();
-                        dialog.cancel();
-                    }
-                });
-        this.builder.setMessage(result).setTitle("Game Over");
-
-        AlertDialog dialog = this.builder.create();
+        Intent myIntent = new Intent(Activity_Main.this, Activity_Result.class);
+        myIntent.putExtra(Activity_Result.RESULT, result);
+        myIntent.putExtra(Activity_Result.WINNER_AVATAR, avatar);
+        startActivity(myIntent);
+        finish();
     }
 
     private void findViews() {
@@ -137,7 +133,7 @@ public class Activity_Main extends AppCompatActivity {
     private void loadPlayers() {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
-            players.add(new Player(Player.Gender.MALE));
+            players.add(new Player(i%2 == 0 ? Player.Gender.MALE : Player.Gender.FEMALE));
         }
     }
 
@@ -147,11 +143,9 @@ public class Activity_Main extends AppCompatActivity {
         int deckSize = cards.size()/NUM_OF_PLAYERS;
         for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
             playerCards.addAll(cards.subList(i*deckSize, (i+1)*deckSize));
-            Log.d("pttttA", "" + playerCards.size());
             players.get(i).addCardsToDeck(playerCards);
             playerCards.clear();
-            Log.d("pttttB", "Player #" + (i+1));
-            players.get(i).printDeck();
+            players.get(i).printDeck(i);
         }
     }
 
