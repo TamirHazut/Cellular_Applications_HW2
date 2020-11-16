@@ -58,7 +58,7 @@ public class Activity_Result extends AppCompatActivity {
         this.result_BTN_new_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(Activity_Result.this, Activity_Main.class);
+                Intent myIntent = new Intent(Activity_Result.this, Activity_Game.class);
                 startActivity(myIntent);
                 finish();
             }
