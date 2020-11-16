@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">War Game</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_top_ten">Top 10</string>
+    <string name="btn_main_screen">Back to main</string>
+    <string name="activity_top_ten_title">Top 10 Players</string>
+    <string name="btn_activity_close">Close</string>
+    <string name="btn_map">Map</string>
+    <string name="headeritem_player_rank">Rank</string>
+    <string name="headeritem_player_name">Name</string>
+    <string name="headeritem_player_score">Score</string>
 </resources>

@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.war.logic.Card;
-import com.example.war.logic.Deck;
+import com.example.war.logic.Gender;
+import com.example.war.logic.game.Card;
+import com.example.war.logic.game.Deck;
 import com.example.war.logic.Player;
 
 import java.util.ArrayList;
@@ -45,14 +46,14 @@ public class Activity_Game extends AppCompatActivity {
     }
 
     private void initViews() {
-        game_LBL_score_p1.setText("" + players.get(0).getScore());
+        game_LBL_score_p1.setText(String.valueOf(players.get(0).getScore()));
         game_IMG_avatar_p1.setBackgroundResource(
-                (players.get(0).getGender() == Player.Gender.MALE
+                (players.get(0).getGender() == Gender.MALE
                         ? R.drawable.user_avatar_male
                         : R.drawable.user_avatar_female));
-        game_LBL_score_p2.setText("" + players.get(1).getScore());
+        game_LBL_score_p2.setText(String.valueOf(players.get(1).getScore()));
         game_IMG_avatar_p2.setBackgroundResource(
-                (players.get(1).getGender() == Player.Gender.MALE
+                (players.get(1).getGender() == Gender.MALE
                         ? R.drawable.user_avatar_male
                         : R.drawable.user_avatar_female));
         game_IMG_play.setBackgroundResource(R.drawable.play_button);
@@ -77,10 +78,10 @@ public class Activity_Game extends AppCompatActivity {
         game_IMG_card_p2.setBackgroundResource(p2_card_id);
         if (p1_card.getValue() > p2_card.getValue()) {
             players.get(0).addScore();
-            game_LBL_score_p1.setText("" + players.get(0).getScore());
+            game_LBL_score_p1.setText(String.valueOf(players.get(0).getScore()));
         } else if (p2_card.getValue() > p1_card.getValue()) {
             players.get(1).addScore();
-            game_LBL_score_p2.setText("" + players.get(1).getScore());
+            game_LBL_score_p2.setText(String.valueOf(players.get(1).getScore()));
         }
         if (players.get(0).getDeck().isEmpty() || players.get(0).getDeck().isEmpty()) {
             openResult();
@@ -92,12 +93,12 @@ public class Activity_Game extends AppCompatActivity {
         int avatar;
         if (players.get(0).getScore() > players.get(1).getScore()) {
             result = 1;
-            avatar = (players.get(0).getGender() == Player.Gender.MALE
+            avatar = (players.get(0).getGender() == Gender.MALE
                     ? R.drawable.user_avatar_male
                     : R.drawable.user_avatar_female);
         } else if (players.get(1).getScore() > players.get(0).getScore()) {
             result = 2;
-            avatar = (players.get(1).getGender() == Player.Gender.MALE
+            avatar = (players.get(1).getGender() == Gender.MALE
                     ? R.drawable.user_avatar_male
                     : R.drawable.user_avatar_female);
         } else {
@@ -122,7 +123,7 @@ public class Activity_Game extends AppCompatActivity {
     }
 
     private void loadCards() {
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
         for (Deck.CardSuit cardSuit : Deck.CardSuit.values()) {
             for (Deck.CardValue cardValue : Deck.CardValue.values()) {
                 cards.add(new Card(cardSuit, cardValue));
@@ -133,7 +134,7 @@ public class Activity_Game extends AppCompatActivity {
     private void loadPlayers() {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
-            players.add(new Player(i%2 == 0 ? Player.Gender.MALE : Player.Gender.FEMALE));
+            players.add(new Player(i%2 == 0 ? Gender.MALE : Gender.FEMALE));
         }
     }
 

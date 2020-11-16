@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "997836740484",
+    "firebase_url": "https://war-game-hw2.firebaseio.com",
+    "project_id": "war-game-hw2",
+    "storage_bucket": "war-game-hw2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997836740484:android:0f67bca74a3d0ea7afafd1",
+        "android_client_info": {
+          "package_name": "com.example.war"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997836740484-ie9p8p45dhrhdjthljk6sa95pk6jr7n8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI8uJCLK7KbkgdaExlT2f4blgIku9j1Oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997836740484-ie9p8p45dhrhdjthljk6sa95pk6jr7n8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

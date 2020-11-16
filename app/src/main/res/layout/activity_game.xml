@@ -112,7 +112,8 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:weightSum="100">
+            android:weightSum="100"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_weight="7"

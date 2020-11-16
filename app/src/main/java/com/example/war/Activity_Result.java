@@ -58,7 +58,7 @@ public class Activity_Result extends AppCompatActivity {
         this.result_BTN_new_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(Activity_Result.this, Activity_Game.class);
+                Intent myIntent = new Intent(Activity_Result.this, Activity_Main.class);
                 startActivity(myIntent);
                 finish();
             }
@@ -69,6 +69,6 @@ public class Activity_Result extends AppCompatActivity {
         this.result_viewKonfetti = findViewById(R.id.result_viewKonfetti);
         this.result_LBL_match_result = findViewById(R.id.result_LBL_match_result);
         this.result_IMG_avatar_winner = findViewById(R.id.result_IMG_avatar_winner);
-        this.result_BTN_new_game = findViewById(R.id.result_BTN_new_game);
+        this.result_BTN_new_game = findViewById(R.id.result_BTN_back_to_main_screen);
     }
 }

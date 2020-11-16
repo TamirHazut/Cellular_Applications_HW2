@@ -1,19 +1,37 @@
 package com.example.war.logic;
 
-import java.util.List;
+import com.example.war.logic.game.Card;
+import com.example.war.logic.game.Deck;
 
-public class Player {
-    public static enum Gender {MALE, FEMALE};
+import java.util.List;
+import java.util.Objects;
+
+public class Player implements Comparable<Player> {
+
+    private String name;
     private int score;
     private Gender gender;
     private Deck deck;
+    private Location location;
+
+    public Player(String name, Gender gender, int score, Location location) {
+        this.name = name;
+        this.deck = new Deck();
+        this.score = score;
+        this.gender = gender;
+        this.location = location;
+    }
 
     public Player(Gender gender)
     {
-        this.deck = new Deck();
-        this.gender = gender;
-        this.score = 0;
+        this("Player", gender, 0, null);
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() { return name; }
 
     public Gender getGender() {
         return gender;
@@ -21,6 +39,10 @@ public class Player {
 
     public int getScore() {
         return this.score;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     public Deck getDeck() {
@@ -37,5 +59,15 @@ public class Player {
 
     public void printDeck(int i) {
         this.getDeck().printCards(i);
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return this.getScore()-o.getScore();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(score);
     }
 }

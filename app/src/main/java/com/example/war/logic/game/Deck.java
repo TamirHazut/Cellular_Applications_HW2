@@ -1,4 +1,4 @@
-package com.example.war.logic;
+package com.example.war.logic.game;
 
 import android.util.Log;
 
