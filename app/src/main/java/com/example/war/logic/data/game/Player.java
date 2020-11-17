@@ -1,7 +1,7 @@
-package com.example.war.logic;
+package com.example.war.logic.data.game;
 
-import com.example.war.logic.game.Card;
-import com.example.war.logic.game.Deck;
+import com.example.war.logic.data.Gender;
+import com.example.war.logic.data.Location;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +48,8 @@ public class Player implements Comparable<Player> {
     public Deck getDeck() {
         return this.deck;
     }
+
+    public Card drawCard() { return this.deck.getCard(); }
 
     public void addCardsToDeck(List<Card> card) {
         this.getDeck().addCard(card);

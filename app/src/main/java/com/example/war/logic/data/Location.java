@@ -1,4 +1,4 @@
-package com.example.war.logic;
+package com.example.war.logic.data;
 
 public class Location {
     private Double lat;

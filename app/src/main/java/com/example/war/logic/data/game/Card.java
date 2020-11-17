@@ -1,10 +1,10 @@
-package com.example.war.logic.game;
+package com.example.war.logic.data.game;
 
 public class Card {
-    private Deck.CardSuit cardSuit;
-    private Deck.CardValue cardValue;
+    private CardSuit cardSuit;
+    private CardValue cardValue;
 
-    public Card(Deck.CardSuit cardSuit, Deck.CardValue cardValue) {
+    public Card(CardSuit cardSuit, CardValue cardValue) {
         this.cardSuit = cardSuit;
         this.cardValue = cardValue;
     }

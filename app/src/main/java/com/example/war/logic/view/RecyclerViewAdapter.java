@@ -1,6 +1,7 @@
 package com.example.war.logic.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
-import com.example.war.logic.Player;
+import com.example.war.logic.converter.PlayerConverter;
+import com.example.war.logic.data.game.Player;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -26,10 +34,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     };
     private List<Player> players;
     private Context context;
+    private FirebaseFirestore db;
+    private PlayerConverter pConverter;
 
     public RecyclerViewAdapter(List<Player> players, Context context) {
         this.players = players;
         this.context = context;
+        this.db = FirebaseFirestore.getInstance();
+        this.pConverter = new PlayerConverter();
     }
 
     @NonNull
@@ -72,6 +84,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return this.players.size()+1;
     }
 
+    public void addPlayer(Player player) {
+        this.players.add(player);
+    }
+
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView listitem_TXT_player_position;
         private TextView listitem_TXT_player_name;
@@ -84,6 +100,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.listitem_TXT_player_score = itemView.findViewById(R.id.listitem_TXT_player_score);
         }
     }
+
+    public void getPlayersFromFB() {
+        db.collection("players")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                players.clear();
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        players.add(pConverter.mapToPlayerConverter(document.getData()));
+                    }
+                    players.sort(Comparator.reverseOrder());
+
+                } else {
+                    Log.w("ptttt", "Error getting documents.", task.getException());
+                }
+            }
+        });
+    }
+
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         private TextView headeritem_TXT_player_position;
