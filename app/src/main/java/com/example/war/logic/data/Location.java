@@ -1,6 +1,8 @@
 package com.example.war.logic.data;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private Double lat;
     private Double lng;
 
@@ -26,5 +28,13 @@ public class Location {
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "lat=" + lat +
+                ", lng=" + lng +
+                '}';
     }
 }

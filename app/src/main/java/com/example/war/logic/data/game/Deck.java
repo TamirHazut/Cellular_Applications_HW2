@@ -2,10 +2,13 @@ package com.example.war.logic.data.game;
 
 import android.util.Log;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-public class Deck {
+public class Deck implements Serializable {
     private Stack<Card> cards;
 
     public Deck() {
@@ -16,7 +19,7 @@ public class Deck {
         return this.cards;
     }
 
-    public void addCard(List<Card> card) {
+    public void addCards(List<Card> card) {
         this.cards.addAll(card);
     }
 
@@ -28,9 +31,25 @@ public class Deck {
         return this.getCards().isEmpty();
     }
 
-    public void printCards(int i) {
-        for (Card card : this.getCards()) {
-            Log.d("ptttt" + i, card.toString());
+    public static List<Card> loadCards() {
+        List<Card> allCards  = new ArrayList<>();
+        for (CardSuit cardSuit : CardSuit.values()) {
+            for (CardValue cardValue : CardValue.values()) {
+                allCards.add(new Card(cardSuit, cardValue));
+            }
         }
+        return allCards;
+    }
+
+    public static List<Deck> createDecks(int numOfDecks) {
+        List<Card> allCards = loadCards();
+        Collections.shuffle(allCards);
+        List<Deck> decks = new ArrayList<>();
+        int deckSize = allCards.size()/numOfDecks;
+        for (int i = 0; i < numOfDecks; ++i) {
+            decks.add(new Deck());
+            decks.get(i).addCards(allCards.subList(i*deckSize, (i+1)*deckSize));
+        }
+        return decks;
     }
 }

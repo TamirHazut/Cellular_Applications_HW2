@@ -3,10 +3,11 @@ package com.example.war.logic.data.game;
 import com.example.war.logic.data.Gender;
 import com.example.war.logic.data.Location;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Player implements Comparable<Player> {
+public class Player implements Comparable<Player>, Serializable {
 
     private String name;
     private int score;
@@ -24,7 +25,7 @@ public class Player implements Comparable<Player> {
 
     public Player(Gender gender)
     {
-        this("Player", gender, 0, null);
+        this("Tamir", gender, 0, new Location(31.906927, 35.014116));
     }
 
     public void setName(String name) {
@@ -51,16 +52,12 @@ public class Player implements Comparable<Player> {
 
     public Card drawCard() { return this.deck.getCard(); }
 
-    public void addCardsToDeck(List<Card> card) {
-        this.getDeck().addCard(card);
+    public void setDeck(Deck deck) {
+        this.deck = deck;
     }
 
     public void addScore() {
         this.score++;
-    }
-
-    public void printDeck(int i) {
-        this.getDeck().printCards(i);
     }
 
     @Override
@@ -72,4 +69,17 @@ public class Player implements Comparable<Player> {
     public int hashCode() {
         return Objects.hash(score);
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", score=" + score +
+                ", gender=" + gender +
+                ", deck=" + deck +
+                ", location=" + location +
+                '}';
+    }
+
+
 }

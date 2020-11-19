@@ -1,6 +1,8 @@
 package com.example.war.logic.data.game;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private CardSuit cardSuit;
     private CardValue cardValue;
 

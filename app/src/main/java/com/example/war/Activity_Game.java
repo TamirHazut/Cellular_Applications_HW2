@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.war.logic.data.Gender;
 import com.example.war.logic.data.game.GameHandler;
+import com.example.war.logic.data.game.Player;
+import com.example.war.logic.data.repo.PlayersFirebaseHandler;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class Activity_Game extends AppCompatActivity {
@@ -83,29 +87,34 @@ public class Activity_Game extends AppCompatActivity {
 
 
     private void openResult() {
-        int result;
+        Player result;
         int avatar;
         if (gameHandler.getPlayer(0).getScore() > gameHandler.getPlayer(1).getScore()) {
-            result = 1;
+            result = gameHandler.getPlayer(0);
             avatar = (gameHandler.getPlayer(0).getGender() == Gender.MALE
                     ? R.drawable.user_avatar_male
                     : R.drawable.user_avatar_female);
         } else if (gameHandler.getPlayer(1).getScore() > gameHandler.getPlayer(0).getScore()) {
-            result = 2;
+            result = gameHandler.getPlayer(1);
             avatar = (gameHandler.getPlayer(1).getGender() == Gender.MALE
                     ? R.drawable.user_avatar_male
                     : R.drawable.user_avatar_female);
         } else {
-            result = 0;
+            result = null;
             avatar = R.drawable.game_end_draw_avatar;
         }
         Intent myIntent = new Intent(Activity_Game.this, Activity_Result.class);
-        myIntent.putExtra(Activity_Result.RESULT, result);
+        myIntent.putExtra(Activity_Result.WINNER, (Serializable) result);
         myIntent.putExtra(Activity_Result.WINNER_AVATAR, avatar);
         startActivity(myIntent);
         finish();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(Activity_Game.this, Activity_Main.class);
+        startActivity(myIntent);
+        finish();
+    }
 
 }

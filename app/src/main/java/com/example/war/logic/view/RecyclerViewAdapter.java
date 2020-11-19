@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
 import com.example.war.logic.converter.PlayerConverter;
+import com.example.war.logic.data.Location;
 import com.example.war.logic.data.game.Player;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,9 +69,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             header.headeritem_TXT_player_score.setText(R.string.headeritem_player_score);
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder item = (ItemViewHolder) holder;
-            item.listitem_TXT_player_position.setText("#" + position);
+            item.listitem_TXT_player_position.setText(String.format("#" + position));
             item.listitem_TXT_player_name.setText(this.players.get(position-1).getName());
             item.listitem_TXT_player_score.setText(String.valueOf(this.players.get(position-1).getScore()));
+            item.location = this.players.get(position-1).getLocation();
         }
     }
 
@@ -84,14 +86,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return this.players.size()+1;
     }
 
-    public void addPlayer(Player player) {
-        this.players.add(player);
-    }
-
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView listitem_TXT_player_position;
         private TextView listitem_TXT_player_name;
         private TextView listitem_TXT_player_score;
+        private Location location;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,25 +98,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.listitem_TXT_player_name = itemView.findViewById(R.id.listitem_TXT_player_name);
             this.listitem_TXT_player_score = itemView.findViewById(R.id.listitem_TXT_player_score);
         }
-    }
-
-    public void getPlayersFromFB() {
-        db.collection("players")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                players.clear();
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        players.add(pConverter.mapToPlayerConverter(document.getData()));
-                    }
-                    players.sort(Comparator.reverseOrder());
-
-                } else {
-                    Log.w("ptttt", "Error getting documents.", task.getException());
-                }
-            }
-        });
     }
 
 

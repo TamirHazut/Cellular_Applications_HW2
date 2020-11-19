@@ -17,33 +17,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RecyclerViewHandler {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private List<Player> players;
-    private FirebaseFirestore db;
-    private PlayerConverter pConverter;
 
-    public RecyclerViewHandler(Context context, RecyclerView recyclerView) {
-        this.players = new ArrayList<>();
+
+    public RecyclerViewHandler(Context context, RecyclerView recyclerView, List<Player> players) {
         this.recyclerView = recyclerView;
-        this.db = FirebaseFirestore.getInstance();
-        this.pConverter = new PlayerConverter();
         this.recyclerViewAdapter = new RecyclerViewAdapter(players, context);
         this.recyclerView.setAdapter(recyclerViewAdapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        getPlayersFromFB();
     }
 
-    public void getPlayersFromFB() {
-        AtomicInteger count = new AtomicInteger();
-        db.collection("players").get().addOnSuccessListener(
-                listRes -> listRes.forEach(
-                        document -> {
-                            players.add(pConverter.mapToPlayerConverter(document.getData()));
-                            count.getAndIncrement();
-                            if (count.get() == listRes.size()) {
-                                players.sort(Comparator.reverseOrder());
-                                recyclerViewAdapter.notifyDataSetChanged();
-                            }
-                        }
-                ));
+    public void notifyDataSetChanged() {
+        this.recyclerViewAdapter.notifyDataSetChanged();
     }
+
 }

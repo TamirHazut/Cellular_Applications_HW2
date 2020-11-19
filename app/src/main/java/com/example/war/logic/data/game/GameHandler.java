@@ -1,9 +1,10 @@
 package com.example.war.logic.data.game;
 
+import android.util.Log;
+
 import com.example.war.logic.data.Gender;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GameHandler {
@@ -12,17 +13,14 @@ public class GameHandler {
     private List<Player> players;
 
     public GameHandler() {
-        loadCards();
         loadPlayers();
-        createDecks();
+        distributeDecks();
     }
 
-    private void loadCards() {
-        cards = new ArrayList<>();
-        for (CardSuit cardSuit : CardSuit.values()) {
-            for (CardValue cardValue : CardValue.values()) {
-                cards.add(new Card(cardSuit, cardValue));
-            }
+    private void distributeDecks() {
+        List<Deck> decks = Deck.createDecks(NUM_OF_PLAYERS);
+        for (int i = 0; i < NUM_OF_PLAYERS; i++) {
+            players.get(i).setDeck(decks.get(i));
         }
     }
 
@@ -30,18 +28,6 @@ public class GameHandler {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
             players.add(new Player(i%2 == 0 ? Gender.MALE : Gender.FEMALE));
-        }
-    }
-    
-    private void createDecks() {
-        Collections.shuffle(cards);
-        List<Card> playerCards = new ArrayList<>();
-        int deckSize = cards.size()/NUM_OF_PLAYERS;
-        for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
-            playerCards.addAll(cards.subList(i*deckSize, (i+1)*deckSize));
-            players.get(i).addCardsToDeck(playerCards);
-            playerCards.clear();
-            players.get(i).printDeck(i);
         }
     }
     
@@ -63,8 +49,6 @@ public class GameHandler {
         cardsDrawn.add(p2_card_name);
         return cardsDrawn;
     }
-
-
 
     public Player getPlayer(int index) {
         return players.get(index);

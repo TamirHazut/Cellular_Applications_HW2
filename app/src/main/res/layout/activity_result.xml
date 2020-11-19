@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     android:background="@drawable/war_game_table_background"
     tools:context=".Activity_Result">
 
@@ -35,7 +35,7 @@
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textSize="40sp"
+                android:textSize="@dimen/title_text_size"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
@@ -55,13 +55,25 @@
                 android:gravity="center"
                 android:weightSum="100">
 
-                <ImageView
-                    android:id="@+id/result_IMG_avatar_winner"
-                    android:layout_weight="30"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    />
+                    android:layout_weight="30"
+                    android:orientation="vertical"
+                    android:weightSum="100"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/result_IMG_avatar_winner"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="40"
+                        android:layout_margin="4dp"
+                        />
+                </LinearLayout>
+
+
+
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -79,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_round_corners"
-                android:textSize="24sp"
+                android:textSize="@dimen/button_text_size"
                 android:textColor="@color/white"
                 android:layout_weight="30"
                 android:layout_marginBottom="10dp"
