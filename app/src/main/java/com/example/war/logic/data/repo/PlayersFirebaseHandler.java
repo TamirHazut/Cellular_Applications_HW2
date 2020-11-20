@@ -1,6 +1,5 @@
 package com.example.war.logic.data.repo;
 
-
 import com.example.war.logic.converter.PlayerConverter;
 import com.example.war.logic.data.game.Player;
 import com.google.firebase.firestore.DocumentReference;
@@ -12,11 +11,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayersFirebaseHandler {
     private static PlayersFirebaseHandler instance = null;
-    private final String COLLECTION_PATH = "players";
-    private final int MAX_LIST_SIZE = 10;
-    private ArrayList<Player> players;
-    private FirebaseFirestore db;
-    private PlayerConverter pConverter;
+    private static final String COLLECTION_PATH = "scores";
+    private static final int MAX_LIST_SIZE = 10;
+    private final ArrayList<Player> players;
+    private final FirebaseFirestore db;
+    private final PlayerConverter pConverter;
 
     private PlayersFirebaseHandler() {
         this.players = new ArrayList<>();

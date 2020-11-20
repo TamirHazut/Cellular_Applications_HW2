@@ -1,26 +1,25 @@
 package com.example.war;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.war.logic.data.game.Player;
-import com.example.war.logic.view.RecyclerViewHandler;
+import com.example.war.logic.view.Fragment_Map;
+import com.example.war.logic.view.TopTenHandler;
+import com.google.android.gms.maps.GoogleMap;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Activity_Top_Ten extends AppCompatActivity {
     public static final String LIST = "LIST";
-    private RecyclerViewHandler recyclerViewHandler;
-    private Button top_ten_BTN_close;
-    private Button top_ten_BTN_map;
+    private TopTenHandler topTenHandler;
     private RecyclerView top_ten_RCV_players;
-    private Activity_Map mapViewFragment;
 
 
     @Override
@@ -28,42 +27,27 @@ public class Activity_Top_Ten extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_ten);
         List<Player> players = (List<Player>) getIntent().getSerializableExtra(LIST);
-        initActivity(players);
-        mapViewFragment  = new Activity_Map();
-        for (Player p : players) {
-            mapViewFragment.placeMarker(p.getName(), p.getLocation().getLat(), p.getLocation().getLng());
+        findViews();
+        this.topTenHandler = new TopTenHandler(this, top_ten_RCV_players, players);
+        if (savedInstanceState != null) {
+            this.topTenHandler.setPlayers((List<Player>)savedInstanceState.getSerializable(LIST));
+            this.topTenHandler.setFocus(savedInstanceState.getParcelable(Fragment_Map.KEY_CAMERA_POSITION));
         }
     }
-
-    private void initActivity(List<Player> players) {
-        findViews();
-        initViews();
-        this.recyclerViewHandler = new RecyclerViewHandler(this, this.top_ten_RCV_players, players);
-
+    @Override
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
+        GoogleMap map = topTenHandler.getMapView();
+        if (map != null) {
+            outState.putParcelable(Fragment_Map.KEY_CAMERA_POSITION, map.getCameraPosition());
+            outState.putSerializable(LIST, (ArrayList<Player>)this.topTenHandler.getPlayers());
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private void findViews() {
         this.top_ten_RCV_players = findViewById(R.id.top_ten_RCV_players);
-        this.top_ten_BTN_close = findViewById(R.id.top_ten_BTN_close);
-        this.top_ten_BTN_map = findViewById(R.id.top_ten_BTN_map);
     }
 
-    private void initViews() {
-        this.top_ten_BTN_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        this.top_ten_BTN_map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.top_ten_LAY_bottom, mapViewFragment);
-                transaction.commit();
-            }
-        });
-    }
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(Activity_Top_Ten.this, Activity_Main.class);

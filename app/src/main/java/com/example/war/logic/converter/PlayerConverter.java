@@ -1,7 +1,5 @@
 package com.example.war.logic.converter;
 
-import android.util.Log;
-
 import com.example.war.logic.data.Gender;
 import com.example.war.logic.data.Location;
 import com.example.war.logic.data.game.Player;

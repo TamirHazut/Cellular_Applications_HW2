@@ -1,7 +1,6 @@
 package com.example.war.logic.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
-import com.example.war.logic.converter.PlayerConverter;
-import com.example.war.logic.data.Location;
 import com.example.war.logic.data.game.Player;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private enum Type {
         HEADER(0), ITEM(1);
 
-        private int numVal;
+        private final int numVal;
 
         Type(int numVal) { this.numVal = numVal; }
 
         public int getNumVal() { return numVal; }
-    };
-    private List<Player> players;
-    private Context context;
-    private FirebaseFirestore db;
-    private PlayerConverter pConverter;
+    }
+    private final List<Player> players;
+    private final OnClickInterface onClickInterface;
 
-    public RecyclerViewAdapter(List<Player> players, Context context) {
+    public RecyclerViewAdapter(List<Player> players, Context context, OnClickInterface onClickInterface) {
         this.players = players;
-        this.context = context;
-        this.db = FirebaseFirestore.getInstance();
-        this.pConverter = new PlayerConverter();
+        this.onClickInterface = onClickInterface;
     }
 
     @NonNull
@@ -69,10 +56,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             header.headeritem_TXT_player_score.setText(R.string.headeritem_player_score);
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder item = (ItemViewHolder) holder;
-            item.listitem_TXT_player_position.setText(String.format("#" + position));
+            item.listitem_TXT_player_position.setText("#" + position);
             item.listitem_TXT_player_name.setText(this.players.get(position-1).getName());
             item.listitem_TXT_player_score.setText(String.valueOf(this.players.get(position-1).getScore()));
-            item.location = this.players.get(position-1).getLocation();
         }
     }
 
@@ -87,24 +73,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        private TextView listitem_TXT_player_position;
-        private TextView listitem_TXT_player_name;
-        private TextView listitem_TXT_player_score;
-        private Location location;
+        private final TextView listitem_TXT_player_position;
+        private final TextView listitem_TXT_player_name;
+        private final TextView listitem_TXT_player_score;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             this.listitem_TXT_player_position = itemView.findViewById(R.id.listitem_TXT_player_position);
             this.listitem_TXT_player_name = itemView.findViewById(R.id.listitem_TXT_player_name);
             this.listitem_TXT_player_score = itemView.findViewById(R.id.listitem_TXT_player_score);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    onClickInterface.setOnClick(players.get(position-1).getLocation());
+                }
+            });
         }
+
     }
 
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-        private TextView headeritem_TXT_player_position;
-        private TextView headeritem_TXT_player_name;
-        private TextView headeritem_TXT_player_score;
+        private final TextView headeritem_TXT_player_position;
+        private final TextView headeritem_TXT_player_name;
+        private final TextView headeritem_TXT_player_score;
 
         public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);

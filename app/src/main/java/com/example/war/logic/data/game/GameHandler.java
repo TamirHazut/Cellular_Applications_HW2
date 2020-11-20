@@ -1,19 +1,17 @@
 package com.example.war.logic.data.game;
 
-import android.util.Log;
-
 import com.example.war.logic.data.Gender;
+import com.example.war.logic.data.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameHandler {
     private final int NUM_OF_PLAYERS = 2;
-    private List<Card> cards;
     private List<Player> players;
 
-    public GameHandler() {
-        loadPlayers();
+    public GameHandler(Location playerLocation) {
+        loadPlayers(playerLocation);
         distributeDecks();
     }
 
@@ -24,10 +22,10 @@ public class GameHandler {
         }
     }
 
-    private void loadPlayers() {
+    private void loadPlayers(Location playerLocation) {
         players = new ArrayList<>();
         for (int i = 0; i < NUM_OF_PLAYERS; ++i) {
-            players.add(new Player(i%2 == 0 ? Gender.MALE : Gender.FEMALE));
+            players.add(new Player(i%2 == 0 ? Gender.MALE : Gender.FEMALE, playerLocation));
         }
     }
     

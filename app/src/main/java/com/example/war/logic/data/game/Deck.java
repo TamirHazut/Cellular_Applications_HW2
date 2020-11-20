@@ -1,7 +1,5 @@
 package com.example.war.logic.data.game;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +7,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class Deck implements Serializable {
-    private Stack<Card> cards;
+    private final Stack<Card> cards;
 
     public Deck() {
         this.cards = new Stack<>();

@@ -4,17 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.war.logic.data.Gender;
+import com.example.war.logic.data.Location;
 import com.example.war.logic.data.game.GameHandler;
 import com.example.war.logic.data.game.Player;
-import com.example.war.logic.data.repo.PlayersFirebaseHandler;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class Activity_Game extends AppCompatActivity {
@@ -32,11 +30,12 @@ public class Activity_Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        initProgram();
+        Location playerLocation = (Location) getIntent().getSerializableExtra(Activity_Main.LOCATION);
+        initProgram(playerLocation);
     }
 
-    private void initProgram() {
-        gameHandler = new GameHandler();
+    private void initProgram(Location playerLocation) {
+        gameHandler = new GameHandler(playerLocation);
         findViews();
         initViews();
     }
@@ -104,7 +103,7 @@ public class Activity_Game extends AppCompatActivity {
             avatar = R.drawable.game_end_draw_avatar;
         }
         Intent myIntent = new Intent(Activity_Game.this, Activity_Result.class);
-        myIntent.putExtra(Activity_Result.WINNER, (Serializable) result);
+        myIntent.putExtra(Activity_Result.WINNER, result);
         myIntent.putExtra(Activity_Result.WINNER_AVATAR, avatar);
         startActivity(myIntent);
         finish();

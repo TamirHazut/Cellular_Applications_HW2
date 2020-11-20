@@ -1,10 +1,12 @@
 package com.example.war.logic.data.game;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class Card implements Serializable {
-    private CardSuit cardSuit;
-    private CardValue cardValue;
+    private final CardSuit cardSuit;
+    private final CardValue cardValue;
 
     public Card(CardSuit cardSuit, CardValue cardValue) {
         this.cardSuit = cardSuit;
@@ -17,6 +19,7 @@ public class Card implements Serializable {
 
     public String getSuit() { return this.cardSuit.toString().toLowerCase(); }
 
+    @NotNull
     @Override
     public String toString() {
         return "Card{" +

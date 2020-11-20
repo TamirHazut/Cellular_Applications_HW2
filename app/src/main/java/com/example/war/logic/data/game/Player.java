@@ -1,10 +1,14 @@
 package com.example.war.logic.data.game;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.war.logic.data.Gender;
 import com.example.war.logic.data.Location;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class Player implements Comparable<Player>, Serializable {
@@ -13,7 +17,7 @@ public class Player implements Comparable<Player>, Serializable {
     private int score;
     private Gender gender;
     private Deck deck;
-    private Location location;
+    private final Location location;
 
     public Player(String name, Gender gender, int score, Location location) {
         this.name = name;
@@ -23,9 +27,9 @@ public class Player implements Comparable<Player>, Serializable {
         this.location = location;
     }
 
-    public Player(Gender gender)
+    public Player(Gender gender, Location playerLocation)
     {
-        this("Tamir", gender, 0, new Location(31.906927, 35.014116));
+        this("Player", gender, 0, playerLocation);
     }
 
     public void setName(String name) {
@@ -34,8 +38,14 @@ public class Player implements Comparable<Player>, Serializable {
 
     public String getName() { return name; }
 
+    public void setGender(Gender gender) { this.gender = gender; }
+
     public Gender getGender() {
         return gender;
+    }
+
+    public void addScore() {
+        this.score++;
     }
 
     public int getScore() {
@@ -50,15 +60,11 @@ public class Player implements Comparable<Player>, Serializable {
         return this.deck;
     }
 
-    public Card drawCard() { return this.deck.getCard(); }
-
     public void setDeck(Deck deck) {
         this.deck = deck;
     }
 
-    public void addScore() {
-        this.score++;
-    }
+    public Card drawCard() { return this.deck.getCard(); }
 
     @Override
     public int compareTo(Player o) {
@@ -70,6 +76,7 @@ public class Player implements Comparable<Player>, Serializable {
         return Objects.hash(score);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Player{" +
@@ -80,6 +87,5 @@ public class Player implements Comparable<Player>, Serializable {
                 ", location=" + location +
                 '}';
     }
-
 
 }

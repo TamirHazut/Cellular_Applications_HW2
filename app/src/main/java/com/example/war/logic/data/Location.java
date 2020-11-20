@@ -1,35 +1,31 @@
 package com.example.war.logic.data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class Location implements Serializable {
-    private Double lat;
-    private Double lng;
+    private final double lat;
+    private final double lng;
 
-    public Location(Double lat, Double lng) {
+    public Location(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
-    public Location() {
+    public Location(Location location) {
+        this(location.getLat(), location.getLng());
     }
 
-    public Double getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Double getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(Double lng) {
-        this.lng = lng;
-    }
-
+    @NotNull
     @Override
     public String toString() {
         return "Location{" +

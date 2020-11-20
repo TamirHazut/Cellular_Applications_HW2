@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context=".Activity_Map">
+    tools:context=".logic.view.Fragment_Map">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
