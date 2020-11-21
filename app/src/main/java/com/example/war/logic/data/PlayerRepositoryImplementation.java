@@ -1,7 +1,9 @@
-package com.example.war.logic.data.repo;
+package com.example.war.logic.data;
 
+import com.example.war.logic.PlayerConverterImplementation;
 import com.example.war.logic.converter.PlayerConverter;
-import com.example.war.logic.data.game.Player;
+import com.example.war.logic.data.entity.Player;
+import com.example.war.logic.data.repo.PlayerRepository;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -9,21 +11,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PlayersFirebaseHandler {
-    private static PlayersFirebaseHandler instance = null;
-    private static final String COLLECTION_PATH = "scores";
-    private static final int MAX_LIST_SIZE = 10;
+public class PlayerRepositoryImplementation implements PlayerRepository {
+    private final String COLLECTION_PATH = "scores";
+    private final int MAX_LIST_SIZE = 10;
     private final ArrayList<Player> players;
     private final FirebaseFirestore db;
-    private final PlayerConverter pConverter;
+    private final PlayerConverter playerConverter;
 
-    private PlayersFirebaseHandler() {
+    public PlayerRepositoryImplementation() {
         this.players = new ArrayList<>();
         this.db = FirebaseFirestore.getInstance();
-        this.pConverter = new PlayerConverter();
+        this.playerConverter = new PlayerConverterImplementation();
     }
 
-    public void getTopTenPlayersFromFB() {
+    @Override
+    public void updateTopPlayers() {
         if (!this.players.isEmpty()) {
             this.players.clear();
         }
@@ -31,7 +33,7 @@ public class PlayersFirebaseHandler {
         db.collection(COLLECTION_PATH).get().addOnSuccessListener(
                 listRes -> listRes.forEach(
                         document -> {
-                            players.add(pConverter.mapToPlayerConverter(document.getData()));
+                            players.add(playerConverter.mapToPlayer(document.getData()));
                             count.getAndIncrement();
                             if (count.get() == listRes.size()) {
                                 players.sort(Comparator.reverseOrder());
@@ -40,19 +42,14 @@ public class PlayersFirebaseHandler {
                 ));
     }
 
+    @Override
     public void addNewScore(Player player) {
         DocumentReference ref = db.collection(COLLECTION_PATH).document();
-        ref.set(pConverter.playerToMap(player));
+        ref.set(playerConverter.playerToMap(player));
     }
 
-    public ArrayList<Player> getPlayers() {
+    @Override
+    public ArrayList<Player> findTopPlayers() {
         return (this.players.size() < MAX_LIST_SIZE ? this.players : new ArrayList<>(this.players.subList(0, MAX_LIST_SIZE)));
-    }
-
-    public static PlayersFirebaseHandler getInstance() {
-        if (instance == null) {
-            instance = new PlayersFirebaseHandler();
-        }
-        return instance;
     }
 }

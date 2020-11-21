@@ -1,4 +1,7 @@
-package com.example.war.logic.data.game;
+package com.example.war.logic.data.entity;
+
+import com.example.war.logic.data.CardSuit;
+import com.example.war.logic.data.CardValue;
 
 import org.jetbrains.annotations.NotNull;
 

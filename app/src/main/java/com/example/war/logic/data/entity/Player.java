@@ -1,10 +1,6 @@
-package com.example.war.logic.data.game;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.example.war.logic.data.entity;
 
 import com.example.war.logic.data.Gender;
-import com.example.war.logic.data.Location;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +8,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Player implements Comparable<Player>, Serializable {
-
+    private static final String DEFAULT_PLAYER_NAME = "Player";
     private String name;
     private int score;
     private Gender gender;
@@ -29,7 +25,7 @@ public class Player implements Comparable<Player>, Serializable {
 
     public Player(Gender gender, Location playerLocation)
     {
-        this("Player", gender, 0, playerLocation);
+        this(DEFAULT_PLAYER_NAME, gender, 0, playerLocation);
     }
 
     public void setName(String name) {

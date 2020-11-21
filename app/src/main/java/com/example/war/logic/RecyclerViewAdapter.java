@@ -1,4 +1,4 @@
-package com.example.war.logic.view;
+package com.example.war.logic;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
-import com.example.war.logic.data.game.Player;
+import com.example.war.logic.data.entity.Player;
+import com.example.war.logic.view.OnClickInterface;
 
 import java.util.List;
 

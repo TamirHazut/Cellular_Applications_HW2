@@ -9,4 +9,8 @@
     <string name="headeritem_player_rank">Rank</string>
     <string name="headeritem_player_name">Name</string>
     <string name="headeritem_player_score">Score</string>
+    <string name="winner_name_dialog_title">Enter name</string>
+    <string name="txt_winner_name">Enter your name</string>
+    <string name="edt_winner_name">Type your name</string>
+    <string name="button_submit">Submit</string>
 </resources>

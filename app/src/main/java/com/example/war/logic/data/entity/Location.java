@@ -1,4 +1,4 @@
-package com.example.war.logic.data;
+package com.example.war.logic.data.entity;
 
 import org.jetbrains.annotations.NotNull;
 

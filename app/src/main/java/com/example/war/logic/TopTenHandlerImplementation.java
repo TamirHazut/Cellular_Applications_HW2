@@ -1,4 +1,4 @@
-package com.example.war.logic.view;
+package com.example.war.logic;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,26 +7,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
-import com.example.war.logic.data.Location;
-import com.example.war.logic.data.game.Player;
+import com.example.war.fragment.Fragment_Map;
+import com.example.war.logic.data.entity.Location;
+import com.example.war.logic.data.entity.Player;
+import com.example.war.logic.handler.TopTenHandler;
+import com.example.war.logic.view.OnClickInterface;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 
 import java.util.List;
 
-public class TopTenHandler {
+public class TopTenHandlerImplementation implements TopTenHandler {
     private final Fragment_Map mapViewFragment;
     private List<Player> players;
     private Location location;
 
-    public TopTenHandler(AppCompatActivity context, RecyclerView recyclerView, List<Player> players) {
+    public TopTenHandlerImplementation(AppCompatActivity context, RecyclerView recyclerView, List<Player> players) {
         this.mapViewFragment = new Fragment_Map();
         this.players = players;
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(players, context, new OnClickInterface() {
             @Override
             public void setOnClick(Location l) {
                 location = new Location(l);
-                mapViewFragment.setFocus(location);
+                mapViewFragment.updateMapFocus(location);
             }
         });
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -42,18 +45,29 @@ public class TopTenHandler {
         transaction.commit();
     }
 
-
-    public GoogleMap getMapView() {
-        return this.mapViewFragment.getGoogleMap();
+    @Override
+    public void updateMapFocus(CameraPosition cameraPosition) {
+        this.mapViewFragment.updateMapFocus(cameraPosition);
     }
 
-    public void setFocus(CameraPosition cameraPosition) {
-        this.mapViewFragment.setFocus(cameraPosition);
-    }
-
-    public void setPlayers(List<Player> players) {
+    @Override
+    public void updatePlayersList(List<Player> players) {
         this.players = players;
         addMarkers();
+    }
+
+    @Override
+    public List<Player> findAllPlayers() {
+        return this.players;
+    }
+
+    @Override
+    public CameraPosition findMapPosition() {
+        GoogleMap map = this.mapViewFragment.getGoogleMap();
+        if (map != null) {
+            return map.getCameraPosition();
+        }
+        return null;
     }
 
     public void addMarkers() {
@@ -64,7 +78,5 @@ public class TopTenHandler {
         }
     }
 
-    public List<Player> getPlayers() {
-        return this.players;
-    }
+
 }

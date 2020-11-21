@@ -10,4 +10,6 @@
     <color name="orage">#FF5722</color>
     <color name="white">#FFFFFFFF</color>
     <color name="buttonColor">#6CBBFA</color>
+    <color name="recycler_view_haeder_background">#807E7E7E</color>
+    <color name="recycler_view_item_background">#80AFAFAF</color>
 </resources>

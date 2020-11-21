@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:background="@drawable/war_game_table_background"
+    android:background="@drawable/war_game_table_background_portrait"
     tools:context=".Activity_Result">
 
     <nl.dionsegijn.konfetti.KonfettiView
@@ -90,7 +90,7 @@
                 android:id="@+id/result_BTN_back_to_main_screen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_round_corners"
+                android:background="@drawable/style_btn_round_corners"
                 android:textSize="@dimen/button_text_size"
                 android:textColor="@color/white"
                 android:layout_weight="30"

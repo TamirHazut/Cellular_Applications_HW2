@@ -1,4 +1,4 @@
-package com.example.war.logic.view;
+package com.example.war.fragment;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.war.R;
-import com.example.war.logic.data.Location;
+import com.example.war.logic.data.entity.Location;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -83,8 +83,8 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void setFocus(Location location) {
-        this.setFocus(CameraPosition.builder()
+    public void updateMapFocus(Location location) {
+        this.updateMapFocus(CameraPosition.builder()
                 .target(new LatLng(location.getLat(), location.getLng()))
                 .zoom(16)
                 .bearing(0)
@@ -92,7 +92,7 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
                 .build());
     }
 
-    public void setFocus(CameraPosition cameraPosition) {
+    public void updateMapFocus(CameraPosition cameraPosition) {
         if (this.mGoogleMap != null) {
             this.mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }

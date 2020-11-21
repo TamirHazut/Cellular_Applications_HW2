@@ -1,20 +1,24 @@
 package com.example.war;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.war.logic.data.game.Player;
-import com.example.war.logic.data.repo.PlayersFirebaseHandler;
-
-import java.io.Serializable;
+import com.example.war.fragment.Fragment_Winner_Dialog;
+import com.example.war.logic.ResultHandlerImplementation;
+import com.example.war.logic.data.entity.Player;
+import com.example.war.logic.handler.ResultHandler;
 
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.emitters.StreamEmitter;
@@ -24,9 +28,7 @@ import nl.dionsegijn.konfetti.models.Size;
 public class Activity_Result extends AppCompatActivity {
     public static final String WINNER = "WINNER";
     public static final String WINNER_AVATAR = "WINNER_AVATAR";
-    private PlayersFirebaseHandler playersFirebaseHandler;
-    private Player winner;
-    private int winnerAvatar;
+    private ResultHandler resultHandler;
     private KonfettiView result_viewKonfetti;
     private TextView result_LBL_match_result;
     private ImageView result_IMG_avatar_winner;
@@ -37,17 +39,25 @@ public class Activity_Result extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        winner = (Player) getIntent().getSerializableExtra(WINNER);
-        winnerAvatar = getIntent().getIntExtra(WINNER_AVATAR, R.drawable.game_end_draw_avatar);
-        playersFirebaseHandler = PlayersFirebaseHandler.getInstance();
+        Player winner = (Player) getIntent().getSerializableExtra(WINNER);
+        int winnerAvatar = getIntent().getIntExtra(WINNER_AVATAR, R.drawable.game_end_draw_avatar);
+        resultHandler = new ResultHandlerImplementation(winner);
         findViews();
-        initViews();
+        initViews(winnerAvatar);
     }
 
-    private void initViews() {
-        this.result_LBL_match_result.setText(winner != null ? winner.getName() + " Won!" : "It's a Tie!");
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(Activity_Result.this, Activity_Main.class);
+        myIntent.putExtra(WINNER, this.resultHandler.findWinner());
+        startActivity(myIntent);
+        finish();
+    }
+
+    private void initViews(int winnerAvatar) {
+        this.result_LBL_match_result.setText(this.resultHandler.gameResultMessage());
         this.result_IMG_avatar_winner.setBackgroundResource(winnerAvatar);
-        if (winner != null) {
+        if (this.resultHandler.findWinner() != null) {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int width = displayMetrics.widthPixels/2;
@@ -63,7 +73,7 @@ public class Activity_Result extends AppCompatActivity {
                             width,
                             -50f)
                     .streamFor(300, StreamEmitter.INDEFINITE);
-            this.playersFirebaseHandler.addNewScore(this.winner);
+            this.resultHandler.addNewScore();
         }
         this.result_BTN_new_game.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +88,5 @@ public class Activity_Result extends AppCompatActivity {
         this.result_LBL_match_result = findViewById(R.id.result_LBL_match_result);
         this.result_IMG_avatar_winner = findViewById(R.id.result_IMG_avatar_winner);
         this.result_BTN_new_game = findViewById(R.id.result_BTN_back_to_main_screen);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent myIntent = new Intent(Activity_Result.this, Activity_Main.class);
-        myIntent.putExtra(WINNER, (Serializable) winner);
-        startActivity(myIntent);
-        finish();
     }
 }

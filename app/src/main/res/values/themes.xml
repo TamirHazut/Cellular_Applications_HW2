@@ -28,6 +28,13 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.War.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/btn_round_corners</item>
+        <item name="android:background">@drawable/style_btn_round_corners</item>
+    </style>
+
+    <style name="Theme.War.RecyclerViewHeader">
+        <item name="android:background">@drawable/style_recyclerview_header</item>
+    </style>
+    <style name="Theme.War.RecyclerViewItem">
+        <item name="android:background">@drawable/style_recyclerview</item>
     </style>
 </resources>

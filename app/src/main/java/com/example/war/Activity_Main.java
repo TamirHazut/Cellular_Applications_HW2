@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.war.logic.data.repo.PlayersFirebaseHandler;
+import com.example.war.logic.data.PlayerRepositoryImplementation;
+import com.example.war.logic.data.repo.PlayerRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -31,8 +31,8 @@ public class Activity_Main extends AppCompatActivity {
     public static final String LOCATION = "LOCATION";
     private final int PERMISSION_ID = 44;
     private FusedLocationProviderClient mFusedLocationClient;
-    private PlayersFirebaseHandler playersFirebaseHandler;
-    private com.example.war.logic.data.Location playerLocation;
+    private PlayerRepository playersRepository;
+    private com.example.war.logic.data.entity.Location playerLocation;
     private Button main_BTN_start;
     private Button main_BTN_top_ten;
 
@@ -41,9 +41,9 @@ public class Activity_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        this.playersFirebaseHandler = PlayersFirebaseHandler.getInstance();
+        this.playersRepository = new PlayerRepositoryImplementation();
         if (savedInstanceState != null) {
-            this.playerLocation = (com.example.war.logic.data.Location) savedInstanceState.getSerializable(LOCATION);
+            this.playerLocation = (com.example.war.logic.data.entity.Location) savedInstanceState.getSerializable(LOCATION);
         }
         if (this.playerLocation == null) {
             getLastLocation();
@@ -64,7 +64,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     private void initViews() {
-        this.playersFirebaseHandler.getTopTenPlayersFromFB();
+        this.playersRepository.updateTopPlayers();
         this.main_BTN_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,15 +78,15 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(Activity_Main.this, Activity_Top_Ten.class);
-                myIntent.putExtra(Activity_Top_Ten.LIST, playersFirebaseHandler.getPlayers());
+                myIntent.putExtra(Activity_Top_Ten.LIST, playersRepository.findTopPlayers());
                 startActivity(myIntent);
                 finish();
             }
         });
     }
-    @SuppressLint("MissingPermission")
+
     private void getLastLocation() {
-        if (checkPermissions()) {
+        try {
             if (isLocationEnabled()) {
                 this.mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -94,40 +94,44 @@ public class Activity_Main extends AppCompatActivity {
                         Location location = task.getResult();
                         if (location == null) {
                             requestNewLocationData();
-                        }
-                        else {
-                            playerLocation = new com.example.war.logic.data.Location(location.getLatitude(), location.getLongitude());
+                        } else {
+                            playerLocation = new com.example.war.logic.data.entity.Location(location.getLatitude(), location.getLongitude());
                         }
                     }
                 });
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
-        }
-        else {
+        } catch (SecurityException ex) {
             requestPermissions();
+            if (checkPermissions()) {
+                getLastLocation();
+            }
         }
     }
-    @SuppressLint("MissingPermission")
-    private void requestNewLocationData() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
 
-        this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        this.mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    private void requestNewLocationData() {
+        try {
+            LocationRequest mLocationRequest = new LocationRequest();
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setInterval(5);
+            mLocationRequest.setFastestInterval(0);
+            mLocationRequest.setNumUpdates(1);
+
+            this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            this.mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        } catch (SecurityException ex) {
+            requestPermissions();
+        }
     }
 
     private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            playerLocation = new com.example.war.logic.data.Location(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            playerLocation = new com.example.war.logic.data.entity.Location(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         }
     };
 
@@ -158,8 +162,6 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
+        getLastLocation();
     }
 }
