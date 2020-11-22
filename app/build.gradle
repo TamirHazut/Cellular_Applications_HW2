@@ -53,6 +53,9 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10'
     implementation 'nl.dionsegijn:konfetti:1.2.5'
 
+    // Loaders
+    implementation 'com.victor:lib:1.0.4'
+
     // Test
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
