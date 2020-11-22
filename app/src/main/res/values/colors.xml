@@ -14,6 +14,7 @@
     <color name="yellow">#FFC200</color>
 
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#9F9F9F</color>
     <color name="buttonColor">#6CBBFA</color>
     <color name="loader">#1697FD</color>
     <color name="recycler_view_haeder_background">#807E7E7E</color>

@@ -57,7 +57,10 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
             List<Player> players = (ArrayList<Player>)savedInstanceState.getSerializable(DataPassString.LIST.toString());
             p1_card_id = savedInstanceState.getInt(DataPassString.P1CARD.toString());
             p2_card_id = savedInstanceState.getInt(DataPassString.P2CARD.toString());
+            roundNumber = savedInstanceState.getInt(DataPassString.ROUND_NUMBER.toString());
             this.gameHandler.restorePlayers(players);
+        } else {
+            this.roundNumber = 0;
         }
         getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -88,6 +91,7 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
             outState.putSerializable(DataPassString.LIST.toString(), this.gameHandler.savePlayers());
             outState.putInt(DataPassString.P1CARD.toString(), this.p1_card_id);
             outState.putInt(DataPassString.P2CARD.toString(), this.p2_card_id);
+            outState.putInt(DataPassString.ROUND_NUMBER.toString(), this.roundNumber);
         }
     }
 
@@ -111,7 +115,6 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     }
 
     private void initViews() {
-        this.roundNumber = 0;
         updateProgressBar();
         Player p1 = this.gameHandler.findPlayerByID(1);
         Player p2 = this.gameHandler.findPlayerByID(2);
@@ -141,14 +144,12 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     }
 
     private void updateProgressBar() {
-        game_PGB_game_round.setProgressText(String.valueOf(this.roundNumber++) + "/" + String.valueOf(MAX_ROUND));
+        game_PGB_game_round.setProgressText(this.roundNumber + "/" + MAX_ROUND);
         game_PGB_game_round.setProgress(this.roundNumber);
-        if (roundNumber >= MAX_ROUND/2 && game_PGB_game_round.getTextProgressColor() != ContextCompat.getColor(getActivity(), R.color.white)) {
-            game_PGB_game_round.setTextProgressColor(ContextCompat.getColor(getActivity(), R.color.white));
-        }
-        if (roundNumber <= MAX_ROUND/3+1) {
+        int changeColorNumber = MAX_ROUND/3+1;
+        if (roundNumber <= changeColorNumber) {
             game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.red));
-        } else if (roundNumber <= (MAX_ROUND/3+1)*2) {
+        } else if (roundNumber <= changeColorNumber*2) {
             game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.yellow));
         } else {
             game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.green));
@@ -156,6 +157,7 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     }
 
     private void drawCards() {
+        this.roundNumber++;
         List<String> drawnCards = this.gameHandler.drawCards();
         updateProgressBar();
         if (drawnCards.isEmpty()) {
