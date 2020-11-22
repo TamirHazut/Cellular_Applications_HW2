@@ -10,10 +10,12 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar;
 import com.example.war.R;
 import com.example.war.logic.GameHandlerImplementation;
 import com.example.war.logic.data.DataPassString;
@@ -25,6 +27,7 @@ import com.example.war.Activity_Main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Fragment_Game extends Fragment implements GameCallback<String> {
     private GameHandler gameHandler;
@@ -32,7 +35,10 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     private int winnerAvatar;
     private int p1_card_id;
     private int p2_card_id;
+    private final int MAX_ROUND = 26;
+    private int roundNumber;
     private Fragment_Winner_Dialog winnerDialog;
+    private TextRoundCornerProgressBar game_PGB_game_round;
     private TextView game_LBL_score_p1;
     private ImageView game_IMG_avatar_p1;
     private ImageView game_IMG_card_p1;
@@ -94,6 +100,7 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     }
 
     private void findViews(View view) {
+        this.game_PGB_game_round = view.findViewById(R.id.game_PGB_game_round);
         this.game_LBL_score_p1 = view.findViewById(R.id.game_LBL_score_p1);
         this.game_IMG_avatar_p1 = view.findViewById(R.id.game_IMG_avatar_p1);
         this.game_IMG_card_p1 = view.findViewById(R.id.game_IMG_card_p1);
@@ -104,6 +111,8 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
     }
 
     private void initViews() {
+        this.roundNumber = 0;
+        updateProgressBar();
         Player p1 = this.gameHandler.findPlayerByID(1);
         Player p2 = this.gameHandler.findPlayerByID(2);
         if (p1 != null) {
@@ -128,10 +137,27 @@ public class Fragment_Game extends Fragment implements GameCallback<String> {
                 drawCards();
             }
         });
+
+    }
+
+    private void updateProgressBar() {
+        game_PGB_game_round.setProgressText(String.valueOf(this.roundNumber++) + "/" + String.valueOf(MAX_ROUND));
+        game_PGB_game_round.setProgress(this.roundNumber);
+        if (roundNumber >= MAX_ROUND/2 && game_PGB_game_round.getTextProgressColor() != ContextCompat.getColor(getActivity(), R.color.white)) {
+            game_PGB_game_round.setTextProgressColor(ContextCompat.getColor(getActivity(), R.color.white));
+        }
+        if (roundNumber <= MAX_ROUND/3+1) {
+            game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.red));
+        } else if (roundNumber <= (MAX_ROUND/3+1)*2) {
+            game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.yellow));
+        } else {
+            game_PGB_game_round.setProgressColor(ContextCompat.getColor(getActivity(), R.color.green));
+        }
     }
 
     private void drawCards() {
         List<String> drawnCards = this.gameHandler.drawCards();
+        updateProgressBar();
         if (drawnCards.isEmpty()) {
             openResult();
         } else {

@@ -19,7 +19,6 @@ import com.example.war.R;
 import com.example.war.logic.TopTenHandlerImplementation;
 import com.example.war.logic.data.DataPassString;
 import com.example.war.logic.data.entity.Player;
-import com.victor.loading.newton.NewtonCradleLoading;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class Fragment_TopTen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top_ten, container, false);
-        top_ten_RotateLoading = (RotateLoading) view.findViewById(R.id.rotateloading);
+        top_ten_RotateLoading = (RotateLoading) view.findViewById(R.id.top_ten_loader);
         top_ten_RotateLoading.start();
         players = (ArrayList<Player>) getArguments().getSerializable(DataPassString.LIST.toString());
         getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

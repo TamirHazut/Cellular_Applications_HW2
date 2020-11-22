@@ -77,7 +77,7 @@
         android:layout_height="match_parent"
         android:gravity="center">
         <com.victor.loading.rotate.RotateLoading
-            android:id="@+id/rotateloading"
+            android:id="@+id/top_ten_loader"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:loading_width="5dp"
