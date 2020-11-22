@@ -13,12 +13,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.war.logic.data.PlayerRepositoryImplementation;
-import com.example.war.logic.data.repo.PlayerRepository;
+import com.example.war.fragment.Fragment_Main;
+import com.example.war.logic.data.DataPassString;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -28,87 +26,74 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class Activity_Main extends AppCompatActivity {
-    public static final String LOCATION = "LOCATION";
     private final int PERMISSION_ID = 44;
     private FusedLocationProviderClient mFusedLocationClient;
-    private PlayerRepository playersRepository;
     private com.example.war.logic.data.entity.Location playerLocation;
-    private Button main_BTN_start;
-    private Button main_BTN_top_ten;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        this.playersRepository = new PlayerRepositoryImplementation();
-        if (savedInstanceState != null) {
-            this.playerLocation = (com.example.war.logic.data.entity.Location) savedInstanceState.getSerializable(LOCATION);
-        }
         if (this.playerLocation == null) {
             getLastLocation();
         }
-        findViews();
-        initViews();
+        if (savedInstanceState == null) {
+            if (findViewById(R.id.main_FGMT_container) != null) {
+                Fragment_Main fragment_main = new Fragment_Main();
+                getSupportFragmentManager().beginTransaction().add(R.id.main_FGMT_container, fragment_main).commit();
+            }
+        } else {
+            this.playerLocation = (com.example.war.logic.data.entity.Location) savedInstanceState.getSerializable(DataPassString.LOCATION.toString());
+        }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(LOCATION, this.playerLocation);
+        outState.putSerializable(DataPassString.LOCATION.toString(), this.playerLocation);
     }
 
-    private void findViews() {
-        this.main_BTN_start = findViewById(R.id.main_BTN_start);
-        this.main_BTN_top_ten = findViewById(R.id.main_BTN_top_ten);
-    }
-
-    private void initViews() {
-        this.playersRepository.updateTopPlayers();
-        this.main_BTN_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(Activity_Main.this, Activity_Game.class);
-                myIntent.putExtra(LOCATION, playerLocation);
-                startActivity(myIntent);
-                finish();
-            }
-        });
-        this.main_BTN_top_ten.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(Activity_Main.this, Activity_Top_Ten.class);
-                myIntent.putExtra(Activity_Top_Ten.LIST, playersRepository.findTopPlayers());
-                startActivity(myIntent);
-                finish();
-            }
-        });
-    }
-
-    private void getLastLocation() {
-        try {
-            if (isLocationEnabled()) {
-                this.mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-                            playerLocation = new com.example.war.logic.data.entity.Location(location.getLatitude(), location.getLongitude());
-                        }
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        } catch (SecurityException ex) {
-            requestPermissions();
-            if (checkPermissions()) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation();
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLastLocation();
+    }
+    private void getLastLocation() {
+        try {
+            if (checkPermissions()) {
+                if (isLocationEnabled()) {
+                    this.mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            Location location = task.getResult();
+                            if (location == null) {
+                                requestNewLocationData();
+                            } else {
+                                playerLocation = new com.example.war.logic.data.entity.Location(location.getLatitude(), location.getLongitude());
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(this, "This app needs location services", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            } else {
+                requestPermissions();
+            }
+        } catch (SecurityException ex) {
+            Toast.makeText(this, "This app needs location services", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -149,19 +134,8 @@ public class Activity_Main extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_ID) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
-        }
+    public com.example.war.logic.data.entity.Location getPlayerLocation() {
+        return playerLocation;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLastLocation();
-    }
 }

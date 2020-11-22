@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:background="@drawable/war_game_table_background_portrait"
-    tools:context=".Activity_Top_Ten">
+    android:background="@drawable/war_game_table_background_landscape">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
-            android:padding="@dimen/_30sdp"
             android:orientation="horizontal">
 
             <TextView
@@ -35,34 +32,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="50"
+            android:layout_weight="80"
             android:orientation="horizontal"
             android:weightSum="100"
             android:gravity="center">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/top_ten_RCV_players"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="90"
-                style="@style/Theme.War.RecyclerViewItem"
-                />
+                android:layout_weight="60"
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp"
+                android:baselineAligned="false">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/top_ten_RCV_players"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    />
+            </LinearLayout>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="30"
-            android:orientation="horizontal"
-            android:padding="@dimen/_8sdp"
-            android:baselineAligned="false">
-            <FrameLayout
-                android:id="@+id/top_ten_FML_map"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_alignParentBottom="true">
-            </FrameLayout>
+                android:layout_weight="40"
+                android:orientation="horizontal"
+                android:padding="@dimen/_8sdp"
+                android:baselineAligned="false">
+                <FrameLayout
+                    android:id="@+id/top_ten_FML_map"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_alignParentBottom="true">
+                </FrameLayout>
+
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

@@ -84,6 +84,18 @@ public class GameHandlerImplementation implements GameHandler {
         return winner;
     }
 
+    @Override
+    public void restorePlayers(List<Player> players) {
+        if (players != null && players.size() > 0) {
+            this.players = players;
+        }
+    }
+
+    @Override
+    public ArrayList<Player> savePlayers() {
+        return (ArrayList<Player>) this.players;
+    }
+
     public Player getPlayer(int index) {
         return players.get(index);
     }

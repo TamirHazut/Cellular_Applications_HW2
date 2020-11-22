@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:background="@drawable/war_game_table_background_landscape"
-    tools:context=".Activity_Result">
+    android:background="@drawable/war_game_table_background_portrait">
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/result_viewKonfetti"
@@ -45,11 +43,10 @@
             android:gravity="center"
             android:layout_margin="4dp"
             android:orientation="horizontal"
-            android:layout_weight="2"
-            android:weightSum="100">
+            android:layout_weight="2">
 
             <LinearLayout
-                android:layout_weight="60"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -64,13 +61,13 @@
                     android:weightSum="100"
                     android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/result_IMG_avatar_winner"
-                            android:layout_weight="60"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_margin="4dp"
-                            />
+                    <ImageView
+                        android:id="@+id/result_IMG_avatar_winner"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="40"
+                        android:layout_margin="4dp"
+                        />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -91,7 +88,7 @@
                 android:background="@drawable/style_btn_round_corners"
                 android:textSize="@dimen/button_text_size"
                 android:textColor="@color/white"
-                android:layout_weight="20"
+                android:layout_weight="30"
                 android:layout_marginBottom="10dp"
                 android:text="@string/btn_main_screen"
                 android:layout_centerHorizontal="true"/>

@@ -1,7 +1,8 @@
 package com.example.war.fragment;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,6 @@ public class Fragment_Winner_Dialog extends DialogFragment {
     private GameCallback<String> gameCallback;
     private EditText winner_EDT_winner_name;
     private Button winner_BTN_submit;
-
-    public Fragment_Winner_Dialog() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
-    }
 
     public static Fragment_Winner_Dialog newInstance(String title) {
         Fragment_Winner_Dialog frag = new Fragment_Winner_Dialog();
@@ -70,12 +65,31 @@ public class Fragment_Winner_Dialog extends DialogFragment {
         this.gameCallback = gameCallback;
     }
 
+    @Override
     public void onDetach() {
         super.onDetach();
         int defaultKey = 0;
         if (this.gameCallback != null) {
             gameCallback.onCall(defaultKey, this.winnerName);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        }
+        else {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 }
 

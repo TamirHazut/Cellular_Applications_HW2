@@ -38,11 +38,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == Type.HEADER.getNumVal()) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.activity_layout_headeritem, parent, false);
+                    .inflate(R.layout.layout_recyclerview_headeritem, parent, false);
             return new HeaderViewHolder(view);
         } else if (viewType == Type.ITEM.getNumVal()) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.activity_layout_listitem, parent, false);
+                    .inflate(R.layout.layout_recyclerview_listitem, parent, false);
             return new ItemViewHolder(view);
         }
         return null;

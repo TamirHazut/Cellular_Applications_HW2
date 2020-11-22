@@ -6,6 +6,7 @@ import com.example.war.logic.data.entity.Player;
 import com.example.war.logic.data.repo.PlayerRepository;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,17 +30,17 @@ public class PlayerRepositoryImplementation implements PlayerRepository {
         if (!this.players.isEmpty()) {
             this.players.clear();
         }
-        AtomicInteger count = new AtomicInteger();
-        db.collection(COLLECTION_PATH).get().addOnSuccessListener(
-                listRes -> listRes.forEach(
-                        document -> {
-                            players.add(playerConverter.mapToPlayer(document.getData()));
-                            count.getAndIncrement();
-                            if (count.get() == listRes.size()) {
-                                players.sort(Comparator.reverseOrder());
+        db.collection(COLLECTION_PATH)
+                .orderBy("score", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .addOnSuccessListener(
+                        listRes -> listRes.forEach(
+                            document -> {
+                                players.add(playerConverter.mapToPlayer(document.getData()));
                             }
-                        }
-                ));
+                        )
+                );
     }
 
     @Override
