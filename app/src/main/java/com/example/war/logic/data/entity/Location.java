@@ -4,9 +4,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-public class Location implements Serializable {
-    private final double lat;
-    private final double lng;
+public class Location {
+    private double lat;
+    private double lng;
+
+    public Location() {
+    }
 
     public Location(double lat, double lng) {
         this.lat = lat;
@@ -21,8 +24,18 @@ public class Location implements Serializable {
         return lat;
     }
 
+    public Location setLat(double lat) {
+        this.lat = lat;
+        return this;
+    }
+
     public double getLng() {
         return lng;
+    }
+
+    public Location setLng(double lng) {
+        this.lng = lng;
+        return this;
     }
 
     @NotNull

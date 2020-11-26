@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class PlayerConverterImplementation implements PlayerConverter {
+
+    public PlayerConverterImplementation() {
+    }
+
     public Player mapToPlayer(Map<String, Object> map) {
         int score = ((Long)map.get("score")).intValue();
         String name = (String)map.get("name");

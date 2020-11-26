@@ -1,12 +1,12 @@
 package com.example.war;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,7 +16,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.war.fragment.Fragment_Main;
-import com.example.war.logic.data.DataPassString;
+import com.example.war.logic.Constants;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -24,17 +24,24 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 
-public class Activity_Main extends AppCompatActivity {
+public class Activity_Main extends Activity_Base {
     private final int PERMISSION_ID = 44;
     private FusedLocationProviderClient mFusedLocationClient;
     private com.example.war.logic.data.entity.Location playerLocation;
+    private SharedPreferences prefs;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        prefs = getSharedPreferences(Constants.SP_FILE_NAME, MODE_PRIVATE);
+        gson = new Gson();
+        String jsonFromMemory = prefs.getString(Constants.LOCATION, "");
+        this.playerLocation = gson.fromJson(jsonFromMemory, com.example.war.logic.data.entity.Location.class);
         if (this.playerLocation == null) {
             getLastLocation();
         }
@@ -43,15 +50,7 @@ public class Activity_Main extends AppCompatActivity {
                 Fragment_Main fragment_main = new Fragment_Main();
                 getSupportFragmentManager().beginTransaction().add(R.id.main_FGMT_container, fragment_main).commit();
             }
-        } else {
-            this.playerLocation = (com.example.war.logic.data.entity.Location) savedInstanceState.getSerializable(DataPassString.LOCATION.toString());
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(DataPassString.LOCATION.toString(), this.playerLocation);
     }
 
     @Override
@@ -67,7 +66,9 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        getLastLocation();
+        if (checkPermissions() && isLocationEnabled()) {
+            getLastLocation();
+        }
     }
     private void getLastLocation() {
         try {
@@ -81,6 +82,9 @@ public class Activity_Main extends AppCompatActivity {
                                 requestNewLocationData();
                             } else {
                                 playerLocation = new com.example.war.logic.data.entity.Location(location.getLatitude(), location.getLongitude());
+                                SharedPreferences.Editor editor = prefs.edit();
+                                Gson gson = new Gson();
+                                editor.putString(Constants.LOCATION, gson.toJson(playerLocation)).apply();
                             }
                         }
                     });

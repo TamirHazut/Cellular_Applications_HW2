@@ -25,8 +25,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public int getNumVal() { return numVal; }
     }
-    private final List<Player> players;
-    private final OnClickInterface onClickInterface;
+    private List<Player> players;
+    private OnClickInterface onClickInterface;
+
+    public RecyclerViewAdapter() {
+    }
 
     public RecyclerViewAdapter(List<Player> players, Context context, OnClickInterface onClickInterface) {
         this.players = players;

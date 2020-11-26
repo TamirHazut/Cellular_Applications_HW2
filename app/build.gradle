@@ -59,6 +59,12 @@ dependencies {
     // Game Progress bar
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
 
+    // Continuable CountDownView
+    implementation 'com.github.douglasspgyn:CircularCountdown:0.3.0'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     // Test
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

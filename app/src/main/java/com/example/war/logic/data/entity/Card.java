@@ -7,9 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-public class Card implements Serializable {
-    private final CardSuit cardSuit;
-    private final CardValue cardValue;
+public class Card {
+    private CardSuit cardSuit;
+    private CardValue cardValue;
+
+    public Card() {
+    }
 
     public Card(CardSuit cardSuit, CardValue cardValue) {
         this.cardSuit = cardSuit;

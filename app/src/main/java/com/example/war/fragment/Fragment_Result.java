@@ -3,7 +3,6 @@ package com.example.war.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
+import com.example.war.Activity_Base;
 import com.example.war.R;
+import com.example.war.logic.Constants;
 import com.example.war.logic.ResultHandlerImplementation;
-import com.example.war.logic.data.DataPassString;
 import com.example.war.logic.data.entity.Player;
 import com.example.war.logic.handler.ResultHandler;
 
@@ -29,7 +25,7 @@ import nl.dionsegijn.konfetti.emitters.StreamEmitter;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
-public class Fragment_Result extends Fragment {
+public class Fragment_Result extends Fragment_Base {
     private Player winner;
     private int winnerAvatar;
     private ResultHandler resultHandler;
@@ -42,23 +38,17 @@ public class Fragment_Result extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result, container, false);
-        for (int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); i++) {
-            Log.d("counter", "onCreateView: " + i + " " + getActivity().getSupportFragmentManager().getBackStackEntryAt(i).getName());
-        }
-        winner = (Player) getArguments().getSerializable(DataPassString.WINNER.toString());
-        winnerAvatar =  getArguments().getInt(DataPassString.WINNER_AVATAR.toString());
-        getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                backToMain();
-            }
-        });
+        winner = fromJson(getFromSharedPreferences(Constants.WINNER, ""), Player.class);
+        winnerAvatar =  getArguments().getInt(Constants.WINNER_AVATAR);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState == null) {
+            playSound(winnerAvatar == R.drawable.game_end_draw_avatar ? R.raw.game_end_draw : R.raw.game_end_winner);
+        }
         resultHandler = new ResultHandlerImplementation(winner);
         findViews(view);
         initViews();
@@ -67,8 +57,7 @@ public class Fragment_Result extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(DataPassString.WINNER.toString(), winner);
-        outState.putInt(DataPassString.WINNER_AVATAR.toString(), winnerAvatar);
+        outState.putInt(Constants.WINNER_AVATAR, winnerAvatar);
     }
 
     private void findViews(View view) {
@@ -102,15 +91,10 @@ public class Fragment_Result extends Fragment {
         this.result_BTN_new_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToMain();
+                ((Activity_Base)getActivity()).backToMain();
             }
         });
     }
 
-    private void backToMain() {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        fm.popBackStackImmediate(Fragment_Main.class.getSimpleName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
 
 }

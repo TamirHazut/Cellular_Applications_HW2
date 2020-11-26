@@ -19,4 +19,5 @@
     <color name="loader">#1697FD</color>
     <color name="recycler_view_haeder_background">#807E7E7E</color>
     <color name="recycler_view_item_background">#80AFAFAF</color>
+    <color name="transparent_white">#00FFFFFF</color>
 </resources>

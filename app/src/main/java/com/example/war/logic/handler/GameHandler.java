@@ -1,5 +1,6 @@
 package com.example.war.logic.handler;
 
+import com.example.war.logic.PlayerHandler;
 import com.example.war.logic.data.entity.Player;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public interface GameHandler {
 
     public Player findWinner();
 
-    public void restorePlayers(List<Player> players);
+    public void restorePlayers(List<PlayerHandler> players);
 
-    public ArrayList<Player> savePlayers();
+    public ArrayList<PlayerHandler> sendPlayers();
 }

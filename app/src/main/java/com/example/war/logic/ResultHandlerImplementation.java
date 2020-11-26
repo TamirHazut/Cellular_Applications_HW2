@@ -8,12 +8,33 @@ import com.example.war.logic.handler.ResultHandler;
 public class ResultHandlerImplementation implements ResultHandler {
     private final String TIE_STRING = "It's a Tie!";
     private final String WIN_STRING =  " Won!";
-    private final PlayerRepository playersRepository;
-    private final Player winner;
+    private PlayerRepository playersRepository;
+    private Player winner;
+
+    public ResultHandlerImplementation() {
+    }
 
     public ResultHandlerImplementation(Player winner) {
         this.playersRepository = new PlayerRepositoryImplementation();
         this.winner = winner;
+    }
+
+    public PlayerRepository getPlayersRepository() {
+        return playersRepository;
+    }
+
+    public ResultHandlerImplementation setPlayersRepository(PlayerRepository playersRepository) {
+        this.playersRepository = playersRepository;
+        return this;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public ResultHandlerImplementation setWinner(Player winner) {
+        this.winner = winner;
+        return this;
     }
 
     @Override

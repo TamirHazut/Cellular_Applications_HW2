@@ -18,9 +18,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import java.util.List;
 
 public class TopTenHandlerImplementation implements TopTenHandler {
-    private final Fragment_Map mapViewFragment;
+    private Fragment_Map mapViewFragment;
     private List<Player> players;
     private Location location;
+
+    public TopTenHandlerImplementation() {
+    }
 
     public TopTenHandlerImplementation(AppCompatActivity context, RecyclerView recyclerView, List<Player> players) {
         this.mapViewFragment = new Fragment_Map();
@@ -36,6 +39,33 @@ public class TopTenHandlerImplementation implements TopTenHandler {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         initMap(context);
 
+    }
+
+    public Fragment_Map getMapViewFragment() {
+        return mapViewFragment;
+    }
+
+    public TopTenHandlerImplementation setMapViewFragment(Fragment_Map mapViewFragment) {
+        this.mapViewFragment = mapViewFragment;
+        return this;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public TopTenHandlerImplementation setPlayers(List<Player> players) {
+        this.players = players;
+        return this;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public TopTenHandlerImplementation setLocation(Location location) {
+        this.location = location;
+        return this;
     }
 
     private void initMap(AppCompatActivity context) {

@@ -7,13 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Player implements Comparable<Player>, Serializable {
+public class Player implements Comparable<Player> {
     private static final String DEFAULT_PLAYER_NAME = "Player";
     private String name;
     private int score;
     private Gender gender;
     private Deck deck;
-    private final Location location;
+    private Location location;
+
+    public Player() {
+    }
 
     public Player(String name, Gender gender, int score, Location location) {
         this.name = name;
@@ -22,54 +25,70 @@ public class Player implements Comparable<Player>, Serializable {
         this.gender = gender;
         this.location = location;
     }
+//
+//    public Player(Gender gender, Location playerLocation)
+//    {
+//        this(DEFAULT_PLAYER_NAME, gender, 0, playerLocation);
+//    }
 
-    public Player(Gender gender, Location playerLocation)
-    {
-        this(DEFAULT_PLAYER_NAME, gender, 0, playerLocation);
+    public String getName() {
+        return name;
     }
 
-    public void setName(String name) {
+    public Player setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public String getName() { return name; }
+    public int getScore() {
+        return score;
+    }
 
-    public void setGender(Gender gender) { this.gender = gender; }
+    public Player setScore(int score) {
+        this.score = score;
+        return this;
+    }
 
     public Gender getGender() {
         return gender;
     }
 
-    public void addScore() {
-        this.score++;
+    public Player setGender(Gender gender) {
+        this.gender = gender;
+        return this;
     }
 
-    public int getScore() {
-        return this.score;
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Player setDeck(Deck deck) {
+        this.deck = deck;
+        return this;
     }
 
     public Location getLocation() {
         return location;
     }
 
-    public Deck getDeck() {
-        return this.deck;
+    public Player setLocation(Location location) {
+        this.location = location;
+        return this;
     }
 
-    public void setDeck(Deck deck) {
-        this.deck = deck;
+    public void addScore() {
+        this.score++;
     }
 
     public Card drawCard() { return this.deck.getCard(); }
 
-    @Override
-    public int compareTo(Player o) {
-        return this.getScore()-o.getScore();
+    public boolean hasCards() {
+        return this.getDeck().isEmpty();
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(score);
+    public int compareTo(Player o) {
+        return this.getScore()-o.getScore();
     }
 
     @NotNull

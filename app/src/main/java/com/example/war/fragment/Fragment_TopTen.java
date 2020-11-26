@@ -10,45 +10,42 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.war.R;
+import com.example.war.logic.Constants;
 import com.example.war.logic.TopTenHandlerImplementation;
-import com.example.war.logic.data.DataPassString;
 import com.example.war.logic.data.entity.Player;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.victor.loading.rotate.RotateLoading;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class Fragment_TopTen extends Fragment {
+public class Fragment_TopTen extends Fragment_Base {
     private RecyclerView top_ten_RCV_players;
-    private ArrayList<Player> players;
+    private List<Player> players;
     private RotateLoading top_ten_RotateLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top_ten, container, false);
-        top_ten_RotateLoading = (RotateLoading) view.findViewById(R.id.top_ten_loader);
-        top_ten_RotateLoading.start();
-        players = (ArrayList<Player>) getArguments().getSerializable(DataPassString.LIST.toString());
-        getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fm.beginTransaction();
-                fm.popBackStackImmediate(Fragment_Main.class.getSimpleName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-        });
+        this.top_ten_RotateLoading = view.findViewById(R.id.top_ten_loader);
+        this.top_ten_RotateLoading.start();
+        this.players = fromJson(getFromSharedPreferences(Constants.TOP_TEN_PLAYERS, ""),
+                new TypeToken<List<Player>>(){}.getType());
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState == null) {
+            playSound(R.raw.top_ten);
+        }
         new Fragment_Map();
         this.top_ten_RCV_players = view.findViewById(R.id.top_ten_RCV_players);
         try {
