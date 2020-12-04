@@ -1,4 +1,4 @@
-package com.example.war;
+package com.example.war.activity;
 
 import android.widget.Toast;
 

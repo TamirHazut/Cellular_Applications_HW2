@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Player implements Comparable<Player> {
-    private static final String DEFAULT_PLAYER_NAME = "Player";
     private String name;
     private int score;
     private Gender gender;
@@ -25,11 +24,6 @@ public class Player implements Comparable<Player> {
         this.gender = gender;
         this.location = location;
     }
-//
-//    public Player(Gender gender, Location playerLocation)
-//    {
-//        this(DEFAULT_PLAYER_NAME, gender, 0, playerLocation);
-//    }
 
     public String getName() {
         return name;
@@ -42,11 +36,6 @@ public class Player implements Comparable<Player> {
 
     public int getScore() {
         return score;
-    }
-
-    public Player setScore(int score) {
-        this.score = score;
-        return this;
     }
 
     public Gender getGender() {

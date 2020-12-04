@@ -19,24 +19,6 @@ public class ResultHandlerImplementation implements ResultHandler {
         this.winner = winner;
     }
 
-    public PlayerRepository getPlayersRepository() {
-        return playersRepository;
-    }
-
-    public ResultHandlerImplementation setPlayersRepository(PlayerRepository playersRepository) {
-        this.playersRepository = playersRepository;
-        return this;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
-    public ResultHandlerImplementation setWinner(Player winner) {
-        this.winner = winner;
-        return this;
-    }
-
     @Override
     public String gameResultMessage() {
         return this.winner != null ? this.winner.getName() + WIN_STRING : TIE_STRING;

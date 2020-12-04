@@ -1,4 +1,5 @@
 package com.example.war.fragment;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -18,8 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Stack;
 
-public class Fragment_Map extends Fragment implements OnMapReadyCallback {
-    public static final String KEY_CAMERA_POSITION = "camera_position";
+public class Fragment_Map extends Fragment {
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private final Stack<MarkerOptions> markers;
@@ -32,11 +32,36 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
-        this.mMapView = v.findViewById(R.id.mapView);
+        findViews(v);
+        initViews();
         this.mMapView.onCreate(savedInstanceState);
-        this.mMapView.getMapAsync(this); //this is important
         return v;
     }
+
+    private void findViews(View v) {
+        this.mMapView = v.findViewById(R.id.mapView);
+    }
+
+    private void initViews() {
+        this.mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mGoogleMap = googleMap;
+                mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+                MarkerOptions marker = new MarkerOptions();
+                while (!markers.isEmpty()) {
+                    marker = markers.pop();
+                    mGoogleMap.addMarker(marker);
+                }
+                if (marker.getPosition() != null) {
+                    CameraPosition liberty = CameraPosition.builder().target(marker.getPosition()).zoom(16).bearing(0).tilt(45).build();
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(liberty));
+                }
+            }
+        }); //this is important
+    }
+
+
 
     @Override
     public void onResume() {
@@ -57,7 +82,7 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         this.mMapView.onSaveInstanceState(outState);
     }
@@ -66,21 +91,6 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         this.mMapView.onLowMemory();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.mGoogleMap = googleMap;
-        this.mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-        MarkerOptions marker = new MarkerOptions();
-        while (!this.markers.isEmpty()) {
-            marker = this.markers.pop();
-            this.mGoogleMap.addMarker(marker);
-        }
-        if (marker.getPosition() != null) {
-            CameraPosition liberty = CameraPosition.builder().target(marker.getPosition()).zoom(16).bearing(0).tilt(45).build();
-            this.mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(liberty));
-        }
     }
 
     public void updateMapFocus(Location location) {

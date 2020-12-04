@@ -39,11 +39,6 @@ public class PlayerRepositoryImplementation implements PlayerRepository {
         this.playerConverter = new PlayerConverterImplementation();
     }
 
-    public PlayerRepositoryImplementation setGson(Gson gson) {
-        this.gson = gson;
-        return this;
-    }
-
     @Override
     public void updateTopPlayers() {
         if (!this.players.isEmpty()) {

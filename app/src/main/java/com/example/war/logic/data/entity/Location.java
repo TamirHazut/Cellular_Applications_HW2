@@ -24,18 +24,8 @@ public class Location {
         return lat;
     }
 
-    public Location setLat(double lat) {
-        this.lat = lat;
-        return this;
-    }
-
     public double getLng() {
         return lng;
-    }
-
-    public Location setLng(double lng) {
-        this.lng = lng;
-        return this;
     }
 
     @NotNull

@@ -13,14 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.war.R;
-import com.example.war.logic.Constants;
-import com.example.war.logic.TopTenTask;
+import com.example.war.logic.TopTenPlayersTask;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class Fragment_Main extends Fragment_Base {
+public class Fragment_Main extends Fragment_Base_With_Sound {
     private Button main_BTN_start;
     private Button main_BTN_top_ten;
     private ExecutorService pool;
@@ -41,7 +40,7 @@ public class Fragment_Main extends Fragment_Base {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        this.pool.execute(new TopTenTask(getPrefs()));
+        this.pool.execute(new TopTenPlayersTask(getPrefs()));
         return view;
     }
 
@@ -49,7 +48,7 @@ public class Fragment_Main extends Fragment_Base {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState == null) {
-            playSound(R.raw.background_music);
+            playSound(R.raw.background_music, true);
         }
         findViews(view);
         initViews();

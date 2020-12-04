@@ -41,24 +41,6 @@ public class TopTenHandlerImplementation implements TopTenHandler {
 
     }
 
-    public Fragment_Map getMapViewFragment() {
-        return mapViewFragment;
-    }
-
-    public TopTenHandlerImplementation setMapViewFragment(Fragment_Map mapViewFragment) {
-        this.mapViewFragment = mapViewFragment;
-        return this;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public TopTenHandlerImplementation setPlayers(List<Player> players) {
-        this.players = players;
-        return this;
-    }
-
     public Location getLocation() {
         return location;
     }
@@ -71,7 +53,7 @@ public class TopTenHandlerImplementation implements TopTenHandler {
     private void initMap(AppCompatActivity context) {
         addMarkers();
         FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.top_ten_FML_map, this.mapViewFragment);
+        transaction.add(R.id.top_ten_LAY_map, this.mapViewFragment);
         transaction.commit();
     }
 
@@ -101,7 +83,7 @@ public class TopTenHandlerImplementation implements TopTenHandler {
     }
 
     public void addMarkers() {
-        if (!this.players.isEmpty()) {
+        if (this.players != null && !this.players.isEmpty()) {
             for (Player p : this.players) {
                 this.mapViewFragment.placeMarker(String.valueOf(p.getScore()), p.getName(), p.getLocation().getLat(), p.getLocation().getLng());
             }

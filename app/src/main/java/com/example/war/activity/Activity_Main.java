@@ -1,4 +1,4 @@
-package com.example.war;
+package com.example.war.activity;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.example.war.R;
 import com.example.war.fragment.Fragment_Main;
 import com.example.war.logic.Constants;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -27,7 +28,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
 public class Activity_Main extends Activity_Base {
-    private final int PERMISSION_ID = 44;
     private FusedLocationProviderClient mFusedLocationClient;
     private com.example.war.logic.data.entity.Location playerLocation;
     private SharedPreferences prefs;
@@ -56,7 +56,7 @@ public class Activity_Main extends Activity_Base {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_ID) {
+        if (requestCode == Constants.PERMISSION_ID) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation();
             }
@@ -130,16 +130,12 @@ public class Activity_Main extends Activity_Base {
     }
 
     private void requestPermissions() {
-        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSION_ID);
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION }, Constants.PERMISSION_ID);
     }
 
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    public com.example.war.logic.data.entity.Location getPlayerLocation() {
-        return playerLocation;
     }
 
 }

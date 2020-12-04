@@ -18,9 +18,7 @@ import java.lang.reflect.Type;
 public abstract class Fragment_Base extends Fragment {
     private SharedPreferences prefs;
     private Gson gson;
-    private MediaPlayer mp;
-    private int soundRawId;
-    private int mpCurrentPosition;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -35,43 +33,6 @@ public abstract class Fragment_Base extends Fragment {
         setRetainInstance(true);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            setSoundRawId(savedInstanceState.getInt(Constants.SOUND_RAW_ID));
-            setMpCurrentPosition(savedInstanceState.getInt(Constants.SOUND_CURRENT_POSITION));
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!isMediaPlayerOn()) {
-            resumeSound();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (isMediaPlayerOn()) {
-            pauseSound();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        stopSound();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(Constants.SOUND_RAW_ID, getSoundRawId());
-        outState.putInt(Constants.SOUND_CURRENT_POSITION, getMpCurrentPosition());
-    }
 
     protected void saveToSharedPreferences(String key, String value) {
         SharedPreferences.Editor editor = prefs.edit();
@@ -97,70 +58,4 @@ public abstract class Fragment_Base extends Fragment {
         return prefs;
     }
 
-    protected void playSound(int rawId) {
-        if (mp!=null) {
-            if (mp.isPlaying()) {
-                stopSound();
-            }
-        }
-        this.soundRawId = rawId;
-        createMediaPlayer();
-        mp.start();
-    }
-
-    private void createMediaPlayer() {
-        mp = MediaPlayer.create(getActivity(), this.soundRawId);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                stopSound();
-            }
-        });
-    }
-
-    protected void pauseSound() {
-        mp.pause();
-        mpCurrentPosition = mp.getCurrentPosition();
-    }
-
-    protected void resumeSound() {
-        if (mp == null) {
-            createMediaPlayer();
-        }
-        if (!mp.isPlaying()) {
-            mp.seekTo(this.mpCurrentPosition);
-            mp.start();
-        }
-    }
-
-    protected void stopSound() {
-        if (mp != null) {
-            mp.reset();
-            mp.release();
-            mp = null;
-        }
-    }
-
-    protected boolean isMediaPlayerOn() {
-        if (this.mp == null) {
-            return false;
-        }
-        return this.mp.isPlaying();
-    }
-
-    public int getSoundRawId() {
-        return this.soundRawId;
-    }
-
-    protected int getMpCurrentPosition() {
-        return this.mp.getCurrentPosition();
-    }
-
-    public void setSoundRawId(int soundRawId) {
-        this.soundRawId = soundRawId;
-    }
-
-    public void setMpCurrentPosition(int mpCurrentPosition) {
-        this.mpCurrentPosition = mpCurrentPosition;
-    }
 }

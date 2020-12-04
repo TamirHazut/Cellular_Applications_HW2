@@ -38,37 +38,25 @@
             android:weightSum="100"
             android:gravity="center">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/top_ten_LAY_list"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="60"
                 android:orientation="horizontal"
                 android:padding="@dimen/_8sdp"
                 android:baselineAligned="false">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/top_ten_RCV_players"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="100"
-                    />
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/top_ten_LAY_map"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:orientation="horizontal"
                 android:padding="@dimen/_8sdp"
                 android:baselineAligned="false">
-                <FrameLayout
-                    android:id="@+id/top_ten_FML_map"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_alignParentBottom="true">
-                </FrameLayout>
-
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>

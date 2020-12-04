@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.war.Activity_Base;
+import com.example.war.activity.Activity_Base;
 import com.example.war.R;
 import com.example.war.logic.Constants;
 import com.example.war.logic.ResultHandlerImplementation;
@@ -25,7 +25,7 @@ import nl.dionsegijn.konfetti.emitters.StreamEmitter;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
-public class Fragment_Result extends Fragment_Base {
+public class Fragment_Result extends Fragment_Base_With_Sound {
     private Player winner;
     private int winnerAvatar;
     private ResultHandler resultHandler;
@@ -47,7 +47,7 @@ public class Fragment_Result extends Fragment_Base {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState == null) {
-            playSound(winnerAvatar == R.drawable.game_end_draw_avatar ? R.raw.game_end_draw : R.raw.game_end_winner);
+            playSound(winnerAvatar == R.drawable.game_end_draw_avatar ? R.raw.game_end_draw : R.raw.game_end_winner, false);
         }
         resultHandler = new ResultHandlerImplementation(winner);
         findViews(view);

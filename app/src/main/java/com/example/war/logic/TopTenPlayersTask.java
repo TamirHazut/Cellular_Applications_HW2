@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import com.example.war.logic.data.PlayerRepositoryImplementation;
 import com.example.war.logic.data.repo.PlayerRepository;
 
-public class TopTenTask implements Runnable {
+public class TopTenPlayersTask implements Runnable {
 
     private PlayerRepository playersRepository;
 
-    public TopTenTask(SharedPreferences prefs) {
+    public TopTenPlayersTask(SharedPreferences prefs) {
         this.playersRepository = new PlayerRepositoryImplementation(prefs);
     }
 

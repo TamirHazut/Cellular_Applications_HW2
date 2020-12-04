@@ -31,7 +31,7 @@ import java.util.List;
 import douglasspgyn.com.github.circularcountdown.CircularCountdown;
 import douglasspgyn.com.github.circularcountdown.listener.CircularListener;
 
-public class Fragment_Game extends Fragment_Base implements GameCallback<String> {
+public class Fragment_Game extends Fragment_Base_With_Sound {
     private GameHandler gameHandler;
     private Player winner;
     private int winnerAvatar;
@@ -75,7 +75,7 @@ public class Fragment_Game extends Fragment_Base implements GameCallback<String>
             this.game_IMG_card_p2.setBackgroundResource(p2_card_id);
             configureCountDownProgressBar(countdown_past_time);
         } else {
-            playSound(R.raw.game_start);
+            playSound(R.raw.game_start, false);
             configureCountDownProgressBar(Constants.COUNTDOWN_DEFAULT_START_TIME);
         }
         initViews();
@@ -103,13 +103,13 @@ public class Fragment_Game extends Fragment_Base implements GameCallback<String>
         }
     }
 
-    @Override
-    public void onCall(int key, String body) {
-        if (this.winner != null) {
-            this.winner.setName(body);
-            openResaultFragment();
-        }
-    }
+//    @Override
+//    public void onCall(int key, String body) {
+//        if (this.winner != null) {
+//            this.winner.setName(body);
+//            openResaultFragment();
+//        }
+//    }
 
     private void findViews(View view) {
         this.game_PGB_game_round = view.findViewById(R.id.game_PGB_game_round);
@@ -196,7 +196,7 @@ public class Fragment_Game extends Fragment_Base implements GameCallback<String>
             game_CCC_play.stop();
             openResult();
         } else {
-            playSound(R.raw.draw_card);
+            playSound(R.raw.draw_card, false);
             p1_card_id = this.getResources().getIdentifier(drawnCards.get(0), "drawable", getActivity().getPackageName());
             this.game_IMG_card_p1.setBackgroundResource(p1_card_id);
             p2_card_id = this.getResources().getIdentifier(drawnCards.get(1), "drawable", getActivity().getPackageName());
@@ -210,7 +210,15 @@ public class Fragment_Game extends Fragment_Base implements GameCallback<String>
     private void showWinnerNameDialog() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         Fragment_Winner_Dialog winnerDialog = Fragment_Winner_Dialog.newInstance("Enter name");
-        winnerDialog.setGameCallBack(this);
+        winnerDialog.setGameCallBack(new GameCallback<String>() {
+            @Override
+            public void onCall(int key, String body) {
+                if (winner != null) {
+                    winner.setName(body);
+                    openResaultFragment();
+                }
+            }
+        });
         winnerDialog.show(fm, "fragment_winner_dialog");
     }
 
