@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.example.war.logic.Constants;
 import com.example.war.logic.PlayerConverterImplementation;
+import com.example.war.logic.SharedPreferencesSingleton;
 import com.example.war.logic.converter.PlayerConverter;
 import com.example.war.logic.data.entity.Player;
 import com.example.war.logic.data.repo.PlayerRepository;
@@ -18,21 +19,12 @@ import java.util.List;
 
 public class PlayerRepositoryImplementation implements PlayerRepository {
     private final String COLLECTION_PATH = "scores";
-    private final int MAX_LIST_SIZE = 10;
     private final List<Player> players;
     private final FirebaseFirestore db;
     private final PlayerConverter playerConverter;
-    private SharedPreferences prefs;
     private Gson gson;
 
     public PlayerRepositoryImplementation() {
-        this.players = new ArrayList<>();
-        this.db = FirebaseFirestore.getInstance();
-        this.playerConverter = new PlayerConverterImplementation();
-    }
-
-    public PlayerRepositoryImplementation(SharedPreferences prefs) {
-        this.prefs = prefs;
         this.gson = new Gson();
         this.players = new ArrayList<>();
         this.db = FirebaseFirestore.getInstance();
@@ -56,7 +48,7 @@ public class PlayerRepositoryImplementation implements PlayerRepository {
                                     }
                             );
                             if (players != null) {
-                                SharedPreferences.Editor editor = prefs.edit();
+                                SharedPreferences.Editor editor = SharedPreferencesSingleton.getInstance().getPrefs().edit();
                                 editor.putString(Constants.TOP_TEN_PLAYERS,
                                         gson.toJson(players, new TypeToken<List<Player>>() {
                                         }.getType())).apply();
@@ -73,6 +65,6 @@ public class PlayerRepositoryImplementation implements PlayerRepository {
 
     @Override
     public List<Player> findTopPlayers() {
-        return (this.players.size() < MAX_LIST_SIZE ? this.players : new ArrayList<>(this.players.subList(0, MAX_LIST_SIZE)));
+        return (this.players.size() < Constants.MAX_LIST_SIZE ? this.players : new ArrayList<>(this.players.subList(0, Constants.MAX_LIST_SIZE)));
     }
 }

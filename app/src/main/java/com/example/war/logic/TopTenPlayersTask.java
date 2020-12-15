@@ -9,8 +9,8 @@ public class TopTenPlayersTask implements Runnable {
 
     private PlayerRepository playersRepository;
 
-    public TopTenPlayersTask(SharedPreferences prefs) {
-        this.playersRepository = new PlayerRepositoryImplementation(prefs);
+    public TopTenPlayersTask() {
+        this.playersRepository = new PlayerRepositoryImplementation();
     }
 
     @Override

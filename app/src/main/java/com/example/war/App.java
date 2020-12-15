@@ -2,6 +2,7 @@ package com.example.war;
 
 import android.app.Application;
 
+import com.example.war.logic.LocationHandlerSingleton;
 import com.example.war.logic.SharedPreferencesSingleton;
 
 public class App extends Application {
@@ -10,6 +11,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         SharedPreferencesSingleton.init(this);
+        LocationHandlerSingleton.init(this);
     }
 
 }

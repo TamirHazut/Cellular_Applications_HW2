@@ -14,14 +14,11 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 
 public abstract class Fragment_Base extends Fragment {
-    private SharedPreferences prefs;
     private Gson gson;
-
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        prefs = SharedPreferencesSingleton.getInstance().getPrefs();
         gson = new Gson();
     }
 
@@ -33,12 +30,12 @@ public abstract class Fragment_Base extends Fragment {
 
 
     protected void saveToSharedPreferences(String key, String value) {
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences.Editor editor = SharedPreferencesSingleton.getInstance().getPrefs().edit();
         editor.putString(key, value).apply();
     }
 
     protected String getFromSharedPreferences(String key, String defValue) {
-        return prefs.getString(key, defValue);
+        return SharedPreferencesSingleton.getInstance().getPrefs().getString(key, defValue);
     }
 
     protected String toJson(Object o, Type type) {
@@ -50,10 +47,6 @@ public abstract class Fragment_Base extends Fragment {
 
     protected <T> T fromJson(String json, Type type) {
         return this.gson.fromJson(json, type);
-    }
-
-    protected SharedPreferences getPrefs() {
-        return prefs;
     }
 
 }

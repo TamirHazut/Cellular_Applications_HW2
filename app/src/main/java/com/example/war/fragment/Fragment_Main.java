@@ -40,7 +40,7 @@ public class Fragment_Main extends Fragment_Base_With_Sound {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        this.pool.execute(new TopTenPlayersTask(getPrefs()));
+        this.pool.execute(new TopTenPlayersTask());
         return view;
     }
 

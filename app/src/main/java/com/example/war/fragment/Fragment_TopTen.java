@@ -35,15 +35,6 @@ public class Fragment_TopTen extends Fragment_Base_With_Sound {
         top_ten_RotateLoading.stop();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        int n = getActivity().getSupportFragmentManager().getBackStackEntryCount();
-        for (int i = 0; i < n; i++) {
-            Log.d("onDes", getActivity().getSupportFragmentManager().getBackStackEntryAt(i).toString());
-        }
-    }
-
     private void initViews() {
         this.top_ten_RotateLoading.start();
         this.fragment_list = new Fragment_List();

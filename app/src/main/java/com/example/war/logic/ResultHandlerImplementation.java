@@ -6,8 +6,6 @@ import com.example.war.logic.data.repo.PlayerRepository;
 import com.example.war.logic.handler.ResultHandler;
 
 public class ResultHandlerImplementation implements ResultHandler {
-    private final String TIE_STRING = "It's a Tie!";
-    private final String WIN_STRING =  " Won!";
     private PlayerRepository playersRepository;
     private Player winner;
 
@@ -21,7 +19,7 @@ public class ResultHandlerImplementation implements ResultHandler {
 
     @Override
     public String gameResultMessage() {
-        return this.winner != null ? this.winner.getName() + WIN_STRING : TIE_STRING;
+        return this.winner != null ? this.winner.getName() + Constants.WIN_STRING : Constants.TIE_STRING;
     }
 
     @Override
